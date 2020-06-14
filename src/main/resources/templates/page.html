@@ -1,0 +1,13 @@
+<div th:replace="header"></div>
+
+<th:block th:if="${page != null}">
+	<h1 th:text="${page.getName()}"></h1>
+	<th:block th:if="${session.user}">
+		<th:block th:if="${page.getUser().getUserid() eq session.user.getUserid()}">
+			<a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getPageid()}">Edit Page</a>
+		</th:block>
+	</th:block>
+	<p th:utext="${content}"></p>
+</th:block>
+
+<div th:replace="footer"></div>

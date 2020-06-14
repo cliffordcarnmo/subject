@@ -1,0 +1,19 @@
+<div th:replace="header"></div>
+
+<th:block th:if="${session.user != null and space != null}">
+	<h1 th:text="${'Create a new Page in ' + space.getName()}"></h1>
+	<form action="#" th:action="@{/page}" method="post">
+		<div class="form-group">
+			<label for="name">Page name</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Page name">
+		</div>
+		<div class="form-group">
+			<label for="name">Content</label>
+			<textarea class="form-control" id="content" name="content" placeholder="Page content"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Create Page</button>
+		<input type="hidden" id="spaceid" name="spaceid" th:value="${space.getSpaceid()}">
+	</form>
+</th:block>
+
+<div th:replace="footer"></div>

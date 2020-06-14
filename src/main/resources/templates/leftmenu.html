@@ -1,0 +1,18 @@
+<div class="col-sm-2 p-4" >
+
+<h3>Spaces</h3>
+<nav class="nav flex-column">
+	<a class="nav-link" href="/">Index</a>
+	<th:block th:if="${session.user}">
+		<a class="nav-link" href="/space/create/">Create Space</a>
+	</th:block>
+</nav>
+
+<th:block th:if="${space} and ${space.getPages().size()} gt 0">
+	<h3>Pages</h3>
+	<nav class="nav flex-column">
+		<a th:each="page : ${space.getPages()}" class="nav-link" th:text="${page.getName()}" th:href="${'/space/' + space.getSpaceid() + '/page/' + page.getPageid()}"></a>
+	</nav>
+</th:block>
+
+</div>

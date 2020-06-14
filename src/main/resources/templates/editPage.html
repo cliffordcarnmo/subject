@@ -1,0 +1,26 @@
+<div th:replace="header"></div>
+
+<th:block th:if="${session.user != null and page != null}">
+	<h1 th:text="${'Edit ' + page.getName()}"></h1>
+	<form action="#" th:action="@{/page/edit}" th:object="${page}" method="post">
+		<div class="form-group">
+			<label for="name">Page name</label>
+			<input type="text" class="form-control" id="name" name="name" th:field="*{name}">
+		</div>
+		<div class="form-group">
+			<label for="name">Published</label>
+			<input type="checkbox" th:name="active" th:field="*{active}" th:checked="*{active}" th:value="*{active}" onclick="this.value = this.checked"/>
+		</div>
+		<div class="form-group">
+			<label for="name">Content</label>
+			<textarea rows="20" class="form-control" id="content" name="content" th:field="*{content}"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Update Page</button>
+		<input type="hidden" th:field="*{created}" th:value="${page.created}">
+		<input type="hidden" th:field="*{space}" th:value="${page.getSpace()}">
+		<input type="hidden" th:field="*{user}" th:value="${page.getUser()}">
+		<input type="hidden" th:field="*{pageid}" th:value="*{pageid}">
+	</form>
+</th:block>
+
+<div th:replace="footer"></div>

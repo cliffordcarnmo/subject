@@ -1,0 +1,8 @@
+<div th:replace="header"></div>
+
+<th:block th:if="${user}">
+	<h1 class="pb-3" th:text="${user.name}"></h1>
+	<h4 th:text="${user.email}"></h4>
+</th:block>
+
+<div th:replace="footer"></div>

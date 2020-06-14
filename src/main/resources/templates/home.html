@@ -1,0 +1,26 @@
+<div th:replace="header"></div>
+
+<h1 class="pb-3">New and recently updated Spaces</h1>
+
+<div th:each="space : ${spaceRepository.findAll()}" class="jumbotron jumbotron-fluid">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<h3><a th:text="${space.name}" th:href="@{'/space/' + ${space.spaceid}}"></a></h3>
+				<th:block th:if="${space.description}">
+					<h5 th:text="${space.description}"></h5>
+				</th:block>
+				<p>Operator: <a th:href="@{'/user/' + ${space.userid}}" th:text="${userRepository.findById(space.getUserid()).get().getName()}"></a></p>
+				<p><small th:text="'Updated: ' + ${space.updated}"></small></p>
+			</div>
+			<div class="col">
+				<h5>Pages</h5>
+				<nav class="nav flex-column">
+					<a th:each="spacePages : ${space.getPages()}" class="nav-link" th:text="${spacePages.getName()}" th:href="${'/space/' + spacePages.getSpace().getSpaceid() + '/page/' + spacePages.getPageid()}"></a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:replace="footer"></div>

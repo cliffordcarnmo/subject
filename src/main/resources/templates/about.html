@@ -1,0 +1,86 @@
+<div th:replace="header"></div>
+
+<h1>About</h1>
+<p>Subject is a free and open platform for open information, knowledge and sharing. Content created with Subject is <a href="https://en.wikipedia.org/wiki/Information_wants_to_be_free">publicly visible and available to everyone on the internet</a>. Everyone is free to browse the content hosted on Subject but to create content users need to be <a href="/register">registered</a>. The motivation for creating yet another content management system came from the fact that other applications seems to focus more on additional services than on the actual content.</p>
+<h4>Philosophy</h4>
+<p>Your personal information or the content you produce with Subject will never be shared, sold, traded or capitalized upon with or by third-parties. We do not advertise or endorse commercial products on Subject and we never will. Subject is about sharing knowledge for the greater good of humanity.</p>
+<h4>Moderation</h4>
+<p>Content creators are responsible for their content. We will never moderate, influence, edit or in any other way dictate what information is generated on Subject. We do however adhere to local laws and regulations and will report content that is in direct conflict with the law to the relevant authorities.</p>
+<h4>Usage</h4>
+<p>Built upon the concept of <b>Spaces</b> and <b>Pages</b>, anyone can create and organize hierarchical information. Content is created with the <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> markup language, HTML or plain text. Contributed content is available at https://www.subject.se/spaces/space-name/page-name.</p>
+<h4>Example</h4>
+<p>Let's take a look at the fictional computer club called Cosmos. Cosmos use Subject to publish and share information about their club, activities and projects.</p>
+<ul>
+	<li>Cosmos Computer Club <small>(this is a <b>Space</b>)</small></li>
+	<ul>
+		<li>About <small>(This is a Page)</small></li>
+		<ul>
+			<li>History <small>(These are <b>child Pages</b> to the <b>parent Page</b> "About")</small></li>
+			<li>Goal</li>
+			<li>Members</li>
+			<ul>
+				<li>Active <small>(These are <b>child Pages</b> to the <b>parent Page</b> "Members")</small></li>
+				<li>Inactive</li>
+			</ul>
+		</ul>
+	</ul>
+	<ul>
+		<li>Events</li>
+		<ul>
+			<li>Upcoming events</li>
+			<li>Event archive</li>
+		</ul>
+	</ul>
+	<ul>
+		<li>Projects</li>
+		<ul>
+			<li>Software</li>
+			<li>Hardware</li>
+		</ul>
+	</ul>
+</ul>
+<p>By structuring information this way, we can represent everything from cookie recipes, software development project documentation, poetry to non-profit organizations and collections.</p>
+<h4>Technical information</h4>
+<p>Subject is built with the following free and open source software:</p>
+<h5>Programming language</h5>
+<ul>
+	<li><a href="https://openjdk.java.net">Java 14 with OpenJDK</a> <small>Licensed under The GNU General Public License, version 2.</small></li>
+</ul>
+<h5>Build automation tool</h5>
+<ul>
+	<li><a href="https://maven.apache.org/">Apache Maven</a> <small>Licensed under the Apache License 2.0.</small></li>
+</ul>
+<h5>Application frameworks</h5>
+<ul>
+	<li><a href="https://spring.io/projects/spring-boot">Spring Boot</a> <small>Licensed under the Apache License 2.0.</small></li>
+	<li><a href="https://spring.io/projects/spring-data-jpa">Spring JPA</a> <small>Licensed under the Apache License 2.0.</small></li>
+</ul>
+<h5>Application server</h5>
+<ul>
+	<li><a href="https://tomcat.apache.org">Apache Tomcat</a> <small>Licensed under the Apache License 2.0.</small></li>
+</ul>
+<h5>Database server</h5>
+<ul>
+	<li><a href="https://db.apache.org/derby">Apache Derby</a> <small>Licensed under the Apache License 2.0.</small></li>
+</ul>
+<h5>Frontend libraries and tools</h5>
+<ul>
+	<li><a href="https://www.thymeleaf.org">Thymeleaf</a> <small>Licensed under the Apache License 2.0.</small></li>
+	<li><a href="https://getbootstrap.com">Bootstrap</a> <small>Licensed under the MIT license.</small></li>
+	<li><a href="https://jquery.com">JQuery</a> <small>Licensed under the MIT license.</small></li>
+	<li><a href="https://popper.js.org">Popper</a> <small>Licensed under the MIT license.</small></li>
+	<li><a href="https://fonts.google.com/specimen/Ubuntu?query=ubuntu">Ubuntu Font</a> <small>Licensed under the Ubuntu Font License Version 1.0.</small></li>
+	<li><a href="https://github.com/atlassian/commonmark-java">commonmark-java</a> <small>Available under the BSD 2-Clause "Simplified" License.</small></li>
+</ul>
+<h5>IDE</h5>
+<ul>
+	<li><a href="https://code.visualstudio.com">Visual Studio Code</a> <small>Licensed under the MIT license.</small></li>
+</ul>
+<h4>License</h4>
+<p>Subject is free as in libre, gratis and freedom. It is licensed under the MIT license.</p>
+<h4>Source code</h4>
+<p>The Subject source code will be available at <a href="https://github.com">https://github.com</a> after the beta phase. Contributions are very welcome!</p>
+<h4>Contact</h4>
+<p><a href="mailto:sysop@subject.se">sysop@subject.se</a></p>
+
+<div th:replace="footer"></div>

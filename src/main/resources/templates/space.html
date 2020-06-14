@@ -1,0 +1,14 @@
+<div th:replace="header"></div>
+
+<th:block th:if="${space}">
+	<nav class="nav flex-column">
+		<h1 th:text="${space.name}"></h1>
+		<h4 th:text="${space.description}"></h4>
+	</nav>
+</th:block>
+
+<th:block th:if="${space != null and session.user != null}">
+	<a class="btn btn-primary" role="button" th:href="${'/space/' + space.getSpaceid() + '/page/create/'}">Create Page</a>
+</th:block>
+
+<div th:replace="footer"></div>

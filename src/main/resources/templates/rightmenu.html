@@ -1,0 +1,20 @@
+<div class="col-sm-2 p-4">
+
+<th:block th:if="${page != null and pageView == true}">
+	<h5>Author</h5>
+	<p><a th:href="@{'/user/' + ${page.getUser().getUserid()}}" th:text="${page.getUser().getName()}"></a></p>
+	<h5>Created</h5>
+	<p th:text="${page.getCreated()}"></p>
+	<h5>Modified</h5>
+	<p th:text="${page.getUpdated()}"></p>
+	<h5>Published</b></h5>
+	<p th:text="${page.getActive()}"></p>
+	<h5>Page ID</h5>
+	<p th:text="${page.getPageid().toString()}"></p>
+	<h5>Parent Page</h5>
+	<p th:text="${page.getParentid().toString()}"></p>
+	<h5>Content length</h5>
+	<p th:text="${content.length() + ' bytes'}"></p>
+</th:block>
+
+</div>
