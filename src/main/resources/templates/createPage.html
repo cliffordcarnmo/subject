@@ -8,8 +8,8 @@
 			<input type="text" class="form-control" id="name" name="name" placeholder="Page name">
 		</div>
 		<div class="form-group">
-			<label for="name">Content</label>
-			<textarea class="form-control" id="content" name="content" placeholder="Page content"></textarea>
+			<label for="content">Content</label>
+			<textarea rows="20" class="form-control" id="content" name="content" placeholder="Page content"></textarea>
 		</div>
 		<button type="submit" class="btn btn-primary">Create Page</button>
 		<input type="hidden" id="spaceid" name="spaceid" th:value="${space.getSpaceid()}">

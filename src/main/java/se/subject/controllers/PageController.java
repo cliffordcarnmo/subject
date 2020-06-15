@@ -107,11 +107,27 @@ public class PageController {
 	}
 
 	@PostMapping("/page/edit")
-	public RedirectView updatePage(@ModelAttribute("page") Page page, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView updatePage(@ModelAttribute("page") Page newPage, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
-		pageRepository.save(page);
-		redirectView.setUrl("/space/" + String.valueOf(page.getSpace().getSpaceid()) + "/page/" + page.getPageid());
-		redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
+
+		if (session.getAttribute("user") == null) {
+			redirectView.setUrl("/");
+			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
+		} else {
+			if(newPage.getName().isEmpty()){
+				redirectView.setUrl("/");
+				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
+			}else{
+				Page oldPage = pageRepository.findById(newPage.getPageid()).get();
+				oldPage.setContent(newPage.getContent());
+				oldPage.setName(newPage.getName());
+				oldPage.setActive(newPage.getActive());
+				pageRepository.save(oldPage);
+	
+				redirectView.setUrl("/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
+				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
+			}
+		}
 		
 		return redirectView;
 	}
