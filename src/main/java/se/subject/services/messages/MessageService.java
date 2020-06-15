@@ -22,6 +22,7 @@ public class MessageService implements IMessageService {
 			put("registrationMissingInvitationError", new Message(MessageType.danger, "Invalid invitation code."));
 			put("spaceCreationMissingError", new Message(MessageType.danger, "Missing space name."));
 			put("pageCreationMissingError", new Message(MessageType.danger, "Missing page name."));
+			put("pageUpdateMissingError", new Message(MessageType.danger, "Missing page name."));
 			put("userMissingError", new Message(MessageType.danger, "The user does not exist."));
 
 			put("logoutCompleted", new Message(MessageType.success, "You were successfully logged out."));
