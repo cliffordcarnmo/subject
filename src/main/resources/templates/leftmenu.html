@@ -8,10 +8,10 @@
 	</th:block>
 </nav>
 
-<th:block th:if="${space} and ${space.getPages().size()} gt 0">
+<th:block th:if="${space} and ${pages} and ${pages.size()} gt 0">
 	<h3>Pages</h3>
 	<nav class="nav flex-column">
-		<a th:each="page : ${space.getPages()}" class="nav-link" th:text="${page.getName()}" th:href="${'/space/' + space.getSpaceid() + '/page/' + page.getPageid()}"></a>
+		<a th:each="page : ${pages}" class="nav-link" th:text="${page.getName()}" th:href="${'/space/' + space.getSpaceid() + '/page/' + page.getPageid()}"></a>
 	</nav>
 </th:block>
 

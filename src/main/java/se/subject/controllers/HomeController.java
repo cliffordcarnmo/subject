@@ -7,23 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpSession;
 
+import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
 import se.subject.repositories.IUserRepository;
 
 @Controller
 public class HomeController {
 	@Autowired
+	private IUserRepository userRepository;
+
+	@Autowired
 	private ISpaceRepository spaceRepository;
 
 	@Autowired
-	private IUserRepository userRepository;
+	private IPageRepository pageRepository;
 	
 	@GetMapping("/")
 	public ModelAndView home(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
 		modelAndView.addObject("userRepository", userRepository);
-		modelAndView.addObject("spaceRepository", spaceRepository);
+		modelAndView.addObject("spaces", spaceRepository.findAll());
+		modelAndView.addObject("pageRepository", pageRepository);
 
 		return modelAndView;
 	}

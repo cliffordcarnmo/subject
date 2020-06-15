@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/libs/fontawesome/css/fontawesome.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="/css/subject.css">
 		<title>Subject</title>
 		<script>
@@ -39,4 +38,4 @@
 			<div class="row">
 				<div th:replace="leftmenu"></div>
 				<div class="col-sm-8 p-4" style="background-color: white;">
-					<div id="alert-box" role="alert" th:if="${message}" th:text="${message.getMessage()}" th:class="${'fade show alert alert-'+message.getMessageType()}"></div>					
+					<div th:if="${message}" id="alert-box" role="alert" th:text="${message.getMessage()}" th:class="${'fade show alert alert-'+message.getMessageType()}"></div>					

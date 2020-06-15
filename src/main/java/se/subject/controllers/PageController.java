@@ -30,7 +30,7 @@ import se.subject.services.messages.IMessageService;
 public class PageController {
 	@Autowired
 	private IMessageService messageService;
-	
+
 	@Autowired
 	private ISpaceRepository spaceRepository;
 
@@ -43,27 +43,29 @@ public class PageController {
 		modelAndView.setViewName("page");
 		modelAndView.addObject("pageView", true);
 
-		if(spaceRepository.findById(spaceId).isPresent()){
+		if (spaceRepository.findById(spaceId).isPresent()) {
 			Space space = spaceRepository.findById(spaceId).get();
 			modelAndView.addObject("space", space);
-		}else{
+
+			if (pageRepository.findById(pageId).isPresent()) {
+				modelAndView.addObject("pages", pageRepository.findAllByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
+
+				Page page = pageRepository.findById(pageId).get();
+				modelAndView.addObject("page", page);
+
+				Parser parser = Parser.builder().build();
+				Node document = parser.parse(page.getContent());
+				HtmlRenderer renderer = HtmlRenderer.builder().build();
+				modelAndView.addObject("content", renderer.render(document));
+			} else {
+				modelAndView.addObject("message", messageService.getMessage("pageError"));
+				return modelAndView;
+			}
+		} else {
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
+			return modelAndView;
 		}
 
-		if(pageRepository.findById(pageId).isPresent()){
-			Page page = pageRepository.findById(pageId).get();
-			modelAndView.addObject("page", page);
-
-			User user = page.getUser();
-			modelAndView.addObject("user", user);
-
-			Parser parser = Parser.builder().build();
-			Node document = parser.parse(page.getContent());
-			HtmlRenderer renderer = HtmlRenderer.builder().build();
-			modelAndView.addObject("content", renderer.render(document));
-		}else{
-			modelAndView.addObject("message", messageService.getMessage("pageError"));
-		}
 		return modelAndView;
 	}
 
@@ -74,11 +76,11 @@ public class PageController {
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
-		}else{
-			if(pageRepository.findById(pageId).isPresent()){
+		} else {
+			if (pageRepository.findById(pageId).isPresent()) {
 				Page page = pageRepository.findById(pageId).get();
 				modelAndView.addObject("page", page);
-			}else{
+			} else {
 				modelAndView.addObject("message", messageService.getMessage("pageError"));
 			}
 		}
@@ -93,12 +95,12 @@ public class PageController {
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
-		}else{
-			if(spaceRepository.findById(spaceId).isPresent()){
+		} else {
+			if (spaceRepository.findById(spaceId).isPresent()) {
 				Space space = spaceRepository.findById(spaceId).get();
 				modelAndView.addObject("space", space);
 				modelAndView.addObject("page", new Page());
-			}else{
+			} else {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}
 		}
@@ -107,33 +109,36 @@ public class PageController {
 	}
 
 	@PostMapping("/page/edit")
-	public RedirectView updatePage(@ModelAttribute("page") Page newPage, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView updatePage(@ModelAttribute("page") Page newPage, HttpSession session,
+			RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 
 		if (session.getAttribute("user") == null) {
 			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if(newPage.getName().isEmpty()){
+			if (newPage.getName().isEmpty()) {
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
-			}else{
+			} else {
 				Page oldPage = pageRepository.findById(newPage.getPageid()).get();
 				oldPage.setContent(newPage.getContent());
 				oldPage.setName(newPage.getName());
 				oldPage.setActive(newPage.getActive());
 				pageRepository.save(oldPage);
-	
-				redirectView.setUrl("/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
+
+				redirectView.setUrl(
+						"/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
 			}
 		}
-		
+
 		return redirectView;
 	}
 
 	@PostMapping("/page")
-	public RedirectView savePage(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView savePage(@RequestBody MultiValueMap<String, String> values, HttpSession session,
+			RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 
 		if (session.getAttribute("user") == null) {
@@ -148,7 +153,7 @@ public class PageController {
 
 				return redirectView;
 			} else {
-				User user = (User)session.getAttribute("user");
+				User user = (User) session.getAttribute("user");
 				Page page = new Page();
 				page.setName(values.getFirst("name"));
 				page.setContent(values.getFirst("content"));
@@ -157,7 +162,8 @@ public class PageController {
 				page.setActive(true);
 
 				Page createdPage = pageRepository.save(page);
-				redirectView.setUrl("/space/" + String.valueOf(createdPage.getSpace().getSpaceid()) + "/page/" + createdPage.getPageid());
+				redirectView.setUrl("/space/" + String.valueOf(createdPage.getSpace().getSpaceid()) + "/page/"
+						+ createdPage.getPageid());
 				redirectAttributes.addFlashAttribute("user", user);
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreated"));
 			}

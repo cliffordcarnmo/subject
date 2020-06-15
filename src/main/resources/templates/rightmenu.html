@@ -1,6 +1,6 @@
 <div class="col-sm-2 p-4">
 
-<th:block th:if="${page != null and pageView == true}">
+<th:block th:if="${page} and ${pageView} eq true">
 	<h5>Author</h5>
 	<p><a th:href="@{'/user/' + ${page.getUser().getUserid()}}" th:text="${page.getUser().getName()}"></a></p>
 	<h5>Created</h5>

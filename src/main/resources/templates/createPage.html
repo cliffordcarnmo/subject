@@ -1,6 +1,6 @@
 <div th:replace="header"></div>
 
-<th:block th:if="${session.user != null and space != null}">
+<th:block th:if="${session.user} and ${space}">
 	<h1 th:text="${'Create a new Page in ' + space.getName()}"></h1>
 	<form action="#" th:action="@{/page}" method="post">
 		<div class="form-group">

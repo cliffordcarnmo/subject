@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import se.subject.entities.Space;
 import se.subject.entities.User;
+import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
 import se.subject.services.messages.IMessageService;
 
@@ -25,6 +26,9 @@ public class SpaceController {
 
 	@Autowired
 	private ISpaceRepository spaceRepository;
+
+	@Autowired
+	private IPageRepository pageRepository;
 
 	@GetMapping("/space/create")
 	public ModelAndView createSpace(HttpSession session) {
@@ -46,6 +50,7 @@ public class SpaceController {
 		modelAndView.setViewName("space");
 
 		if(spaceRepository.findById(spaceId).isPresent()){
+			modelAndView.addObject("pages", pageRepository.findAllByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
 			modelAndView.addObject("space", spaceRepository.findById(spaceId).get());
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
