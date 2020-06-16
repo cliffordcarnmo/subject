@@ -84,6 +84,7 @@ public class CredentialsController {
 
 				session.setAttribute("user", user);
 				
+				modelAndView.setViewName("home");
 				modelAndView.addObject("message", messageService.getMessage("registrationCompleted"));
 			}else{
 				modelAndView.addObject("message", messageService.getMessage("registrationMissingInvitationError"));
