@@ -10,3 +10,10 @@
 body{
 	font-family: "Ubuntu", sans-serif;
 }
+
+code{
+	background-color: #eeeef5;
+	font-family:monospace;
+	display:block;
+	padding:1em;
+}
