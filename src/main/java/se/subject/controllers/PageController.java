@@ -125,6 +125,11 @@ public class PageController {
 
 				pageRepository.save(oldPage);
 
+				Space space = oldPage.getSpace();
+				space.setUpdated(oldPage.getUpdated());
+
+				spaceRepository.save(space);
+				
 				redirectView.setUrl("/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
 			}
@@ -158,6 +163,11 @@ public class PageController {
 				page.setActive(true);
 
 				Page createdPage = pageRepository.save(page);
+
+				Space space = createdPage.getSpace();
+				space.setUpdated(createdPage.getUpdated());
+
+				spaceRepository.save(space);
 
 				redirectView.setUrl("/space/" + String.valueOf(createdPage.getSpace().getSpaceid()) + "/page/" + createdPage.getPageid());
 				redirectAttributes.addFlashAttribute("user", user);

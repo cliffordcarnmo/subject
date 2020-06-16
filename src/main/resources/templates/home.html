@@ -2,23 +2,18 @@
 
 <th:block th:if="${spaces} and ${spaces.size()} gt 0">
 	<h1 class="pb-3">New and recently updated Spaces</h1>
-	<div th:each="space : ${spaces}" class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<div class="row">
-				<div class="col">
-					<h3><a th:text="${space.getName()}" th:href="@{'/space/' + ${space.getSpaceid()}}"></a></h3>
-					<th:block th:if="${space.getDescription()}">
-						<h5 th:text="${space.getDescription()}"></h5>
-					</th:block>
-					<p>Operator: <a th:href="@{'/user/' + ${space.getUserid()}}" th:text="${userRepository.findById(space.getUserid()).get().getName()}"></a></p>
-					<p><small th:text="${space.getUpdated()}"></small></p>
-				</div>
-				<div class="col">
-					<h5>Pages</h5>
-					<nav class="nav flex-column">
-					<p th:each="spacePages : ${pageRepository.findTop5ByActiveTrueAndSpaceOrderByUpdatedDesc(space)}"><small th:text="${spacePages.getUpdated()}"></small> <a class="nav-link" th:text="${spacePages.getName()}" th:href="${'/space/' + spacePages.getSpace().getSpaceid() + '/page/' + spacePages.getPageid()}"></a></p>
-					</nav>
-				</div>
+	<div th:each="space : ${spaces}" class="card mb-3">
+		<div class="h2 card-header"><a th:text="${space.getName()}" th:href="@{'/space/' + ${space.getSpaceid()}}"></a></div>
+		<div class="card-body">
+			<th:block th:if="${space.getDescription()}">
+				<p class="card-title h3" th:text="${space.getDescription()}"></p>
+			</th:block>
+			<p class="small card-subtitle text-muted" th:text="${'Updated ' + space.getUpdated()}"></p>
+			<div class="card-text">
+				<p class="small">Operator: <a th:href="@{'/user/' + ${space.getUserid()}}" th:text="${userRepository.findById(space.getUserid()).get().getName()}"></a></p>
+				<ul class="list-unstyled">
+					<li th:each="spacePages : ${pageRepository.findTop5ByActiveTrueAndSpaceOrderByUpdatedDesc(space)}"> <a th:text="${spacePages.getName()}" th:href="${'/space/' + spacePages.getSpace().getSpaceid() + '/page/' + spacePages.getPageid()}"></a> <small class="text-muted" th:text="${userRepository.findById(space.getUserid()).get().getName() + ', ' + spacePages.getUpdated()}"></small></li>
+				</nav>
 			</div>
 		</div>
 	</div>
