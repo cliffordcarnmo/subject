@@ -17,6 +17,7 @@ import se.subject.entities.Space;
 import se.subject.entities.User;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
+import se.subject.repositories.IUserRepository;
 import se.subject.services.messages.IMessageService;
 
 @Controller
@@ -29,6 +30,9 @@ public class SpaceController {
 
 	@Autowired
 	private IPageRepository pageRepository;
+
+	@Autowired
+	private IUserRepository userRepository;
 
 	@GetMapping("/space/create")
 	public ModelAndView createSpace(HttpSession session) {
@@ -50,7 +54,9 @@ public class SpaceController {
 		modelAndView.setViewName("space");
 
 		if(spaceRepository.findById(spaceId).isPresent()){
-			modelAndView.addObject("pages", pageRepository.findAllByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
+			modelAndView.addObject("userRepository", userRepository);
+			modelAndView.addObject("pages", pageRepository.findTop10ByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
+			modelAndView.addObject("allPages", pageRepository.findAllByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
 			modelAndView.addObject("space", spaceRepository.findById(spaceId).get());
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));

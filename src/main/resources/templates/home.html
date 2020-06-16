@@ -13,7 +13,7 @@
 				<p class="small">Operator: <a th:href="@{'/user/' + ${space.getUserid()}}" th:text="${userRepository.findById(space.getUserid()).get().getName()}"></a></p>
 				<ul class="list-unstyled">
 					<li th:each="spacePages : ${pageRepository.findTop5ByActiveTrueAndSpaceOrderByUpdatedDesc(space)}"> <a th:text="${spacePages.getName()}" th:href="${'/space/' + spacePages.getSpace().getSpaceid() + '/page/' + spacePages.getPageid()}"></a> <small class="text-muted" th:text="${userRepository.findById(space.getUserid()).get().getName() + ', ' + spacePages.getUpdated()}"></small></li>
-				</nav>
+				</ul>
 			</div>
 		</div>
 	</div>

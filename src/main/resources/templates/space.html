@@ -1,14 +1,29 @@
 <div th:replace="header"></div>
 
-<th:block th:if="${space}">
-	<nav class="nav flex-column">
-		<h1 th:text="${space.getName()}"></h1>
-		<h4 th:text="${space.getDescription()}"></h4>
-	</nav>
-</th:block>
+	<div class="row">
+		<div class="col">
+			<th:block th:if="${space}">
+				<nav class="nav flex-column">
+					<h1 th:text="${space.getName()}"></h1>
+					<h4 th:text="${space.getDescription()}"></h4>
+				</nav>
+			</th:block>
+		</div>
+		<div class="col text-right">
+			<th:block th:if="${space} and ${session.user}">
+				<a class="btn btn-primary float-right align-top" role="button"
+					th:href="${'/space/' + space.getSpaceid() + '/page/create/'}">Create Page</a>
+			</th:block>
+		</div>
+	</div>
 
-<th:block th:if="${space} and ${session.user}">
-	<a class="btn btn-primary" role="button" th:href="${'/space/' + space.getSpaceid() + '/page/create/'}">Create Page</a>
-</th:block>
+<h3 class="pt-3">All Pages</h3>
+<ul class="list-unstyled">
+	<li th:each="spacePages : ${allPages}"> <a th:text="${spacePages.getName()}"
+			th:href="${'/space/' + spacePages.getSpace().getSpaceid() + '/page/' + spacePages.getPageid()}"></a> <small
+			class="text-muted"
+			th:text="${userRepository.findById(space.getUserid()).get().getName() + ', ' + spacePages.getUpdated()}"></small>
+	</li>
+</ul>
 
 <div th:replace="footer"></div>

@@ -27,7 +27,7 @@ public class HomeController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
 		modelAndView.addObject("userRepository", userRepository);
-		modelAndView.addObject("spaces", spaceRepository.findAll());
+		modelAndView.addObject("spaces", spaceRepository.findTop10ByActiveTrueOrderByUpdatedDesc());
 		modelAndView.addObject("pageRepository", pageRepository);
 
 		return modelAndView;
