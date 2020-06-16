@@ -13,6 +13,7 @@ public class AboutController {
 	public ModelAndView userView(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("about");
+		
 		return modelAndView;
 	}
 }

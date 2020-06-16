@@ -42,12 +42,13 @@ public class CredentialsController {
 	}
 
 	@GetMapping("/logout")
-	public ModelAndView homeView(HttpSession session, RedirectAttributes attributes) {
+	public ModelAndView homeView(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
 		modelAndView.addObject("message", messageService.getMessage("logoutCompleted"));
 		session.removeAttribute("user");
 		session.invalidate();
+
 		return modelAndView;
 	}
 
@@ -68,6 +69,7 @@ public class CredentialsController {
 		} else {
 			if(invitation.equals("nordkap")){
 				User user = new User();
+
 				user.setEmail(email);
 				user.setName(name);
 				user.setActive(true);

@@ -72,10 +72,12 @@ public class SpaceController {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreationMissingError"));
 			} else {
 				User user = (User)session.getAttribute("user");
+				
 				newSpace.setUserid(user.getUserid());
 				newSpace.setActive(true);
 
 				Space createdSpace = spaceRepository.save(newSpace);
+				
 				redirectView.setUrl("/space/" + createdSpace.getSpaceid());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreated"));
 			}

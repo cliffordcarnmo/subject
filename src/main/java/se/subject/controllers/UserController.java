@@ -79,7 +79,6 @@ public class UserController {
 			if (email.isEmpty() || name.isEmpty()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsMissing"));
 			} else {
-				//TODO: Make sure to check if the requested email is taken
 				user.setEmail(email);
 				user.setName(name);
 

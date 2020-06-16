@@ -59,11 +59,9 @@ public class PageController {
 				modelAndView.addObject("content", renderer.render(document));
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("pageError"));
-				return modelAndView;
 			}
 		} else {
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
-			return modelAndView;
 		}
 
 		return modelAndView;
@@ -109,26 +107,25 @@ public class PageController {
 	}
 
 	@PostMapping("/page/edit")
-	public RedirectView updatePage(@ModelAttribute("page") Page newPage, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView updatePage(@ModelAttribute("page") Page newPage, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl("/");
 
 		if (session.getAttribute("user") == null) {
-			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
 			if (newPage.getName().isEmpty()) {
-				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
 			} else {
 				Page oldPage = pageRepository.findById(newPage.getPageid()).get();
+
 				oldPage.setContent(newPage.getContent());
 				oldPage.setName(newPage.getName());
 				oldPage.setActive(newPage.getActive());
+
 				pageRepository.save(oldPage);
 
-				redirectView.setUrl(
-						"/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
+				redirectView.setUrl("/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
 			}
 		}
@@ -137,24 +134,23 @@ public class PageController {
 	}
 
 	@PostMapping("/page")
-	public RedirectView savePage(@RequestBody MultiValueMap<String, String> values, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView savePage(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl("/");
 
 		if (session.getAttribute("user") == null) {
-			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 
 			return redirectView;
 		} else {
 			if (values.getFirst("name").isEmpty()) {
-				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationMissingError"));
 
 				return redirectView;
 			} else {
 				User user = (User) session.getAttribute("user");
 				Page page = new Page();
+
 				page.setName(values.getFirst("name"));
 				page.setContent(values.getFirst("content"));
 				page.setUser(user);
@@ -162,8 +158,8 @@ public class PageController {
 				page.setActive(true);
 
 				Page createdPage = pageRepository.save(page);
-				redirectView.setUrl("/space/" + String.valueOf(createdPage.getSpace().getSpaceid()) + "/page/"
-						+ createdPage.getPageid());
+
+				redirectView.setUrl("/space/" + String.valueOf(createdPage.getSpace().getSpaceid()) + "/page/" + createdPage.getPageid());
 				redirectAttributes.addFlashAttribute("user", user);
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreated"));
 			}
