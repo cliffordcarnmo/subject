@@ -25,5 +25,5 @@ import se.subject.entities.User;
 
 @Repository
 public interface IUserRepository extends CrudRepository<User, Long> {
-	User findByEmailAndActiveTrue(String email);
+	User findByEmail(String email);
 }

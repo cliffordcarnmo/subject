@@ -66,7 +66,7 @@ public class PageController {
 			modelAndView.addObject("space", space);
 
 			if (pageRepository.findById(pageId).isPresent()) {
-				modelAndView.addObject("pages", pageRepository.findAllByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
+				modelAndView.addObject("pages", pageRepository.findAllBySpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
 
 				Page page = pageRepository.findById(pageId).get();
 				modelAndView.addObject("page", page);
@@ -139,7 +139,6 @@ public class PageController {
 
 				oldPage.setContent(newPage.getContent());
 				oldPage.setName(newPage.getName());
-				oldPage.setActive(newPage.getActive());
 
 				pageRepository.save(oldPage);
 
@@ -178,7 +177,6 @@ public class PageController {
 				page.setContent(values.getFirst("content"));
 				page.setUser(user);
 				page.setSpace(spaceRepository.findById((Long.parseLong(values.getFirst("spaceid")))).get());
-				page.setActive(true);
 
 				Page createdPage = pageRepository.save(page);
 

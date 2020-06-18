@@ -36,9 +36,6 @@ public class Comment implements Serializable {
 	@Column(unique = true, nullable = false)
 	private long commentid;
 
-	@Column(nullable = false)
-	private Boolean active;
-
 	@Lob
 	private String content;
 
@@ -70,14 +67,6 @@ public class Comment implements Serializable {
 
 	public void setCommentid(long commentid) {
 		this.commentid = commentid;
-	}
-
-	public Boolean getActive() {
-		return this.active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	public String getContent() {

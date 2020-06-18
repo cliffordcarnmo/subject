@@ -28,8 +28,7 @@ import se.subject.entities.Space;
 
 @Repository
 public interface IPageRepository extends CrudRepository<Page, Long> {
-	List<Page> findTop5ByActiveTrueAndSpaceOrderByUpdatedDesc(Space space);
-	List<Page> findTop10ByActiveTrueAndSpaceOrderByUpdatedDesc(Space space);
-	List<Page> findAllByActiveTrueAndSpaceOrderByUpdatedDesc(Space space);
-	List<Page> findAllByActiveFalseAndSpaceOrderByUpdatedDesc(Space space);
+	List<Page> findTop5BySpaceOrderByUpdatedDesc(Space space);
+	List<Page> findTop10BySpaceOrderByUpdatedDesc(Space space);
+	List<Page> findAllBySpaceOrderByUpdatedDesc(Space space);
 }

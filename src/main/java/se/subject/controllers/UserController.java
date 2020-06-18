@@ -20,6 +20,7 @@ package se.subject.controllers;
 
 import java.util.HashMap;
 
+import javax.management.modelmbean.ModelMBeanNotificationBroadcaster;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import se.subject.entities.User;
+import se.subject.repositories.ISpaceRepository;
 import se.subject.repositories.IUserRepository;
 import se.subject.services.messages.IMessageService;
 import se.subject.services.security.ICredentialService;
@@ -48,6 +50,9 @@ public class UserController {
 
 	@Autowired
 	private IUserRepository userRepository;
+
+	@Autowired
+	private ISpaceRepository spaceRepository;
 
 	@GetMapping("/edituser")
 	public ModelAndView userView(HttpSession session) {
@@ -68,6 +73,8 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
 
+		modelAndView.addObject("allSpaces", spaceRepository.findAll());		
+		
 		if (userId instanceof Long){
 			if(userRepository.findById(userId).isPresent()){
 				modelAndView.addObject("user", userRepository.findById(userId).get());

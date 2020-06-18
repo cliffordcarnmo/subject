@@ -20,48 +20,50 @@ package se.subject.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 @Entity
-@Table(name = "\"space\"")
-@NamedQuery(name = "Space.findAll", query = "SELECT s FROM Space s")
+@Table(name="\"space\"")
+@NamedQuery(name="Space.findAll", query="SELECT s FROM Space s")
 public class Space implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(unique = true, nullable = false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
 	private long spaceid;
 
-	@Column(nullable = false)
-	private Boolean active;
-
+	@Column(nullable=false)
 	@CreationTimestamp
-	@Column(nullable = false)
 	private Timestamp created;
 
-	@Column(nullable = false, length = 1024)
-	private String name;
-
-	@Column(nullable = true, length = 1024)
+	@Column(length=1024)
 	private String description;
+
+	@Column(nullable=false, length=1024)
+	private String name;
 
 	@UpdateTimestamp
 	private Timestamp updated;
-
-	@Column(nullable = false)
-	private long userid;
 
 	// bi-directional many-to-one association to Page
 	@OneToMany(mappedBy = "space")
 	private List<Page> pages;
 
-	// bi-directional many-to-many association to User
-	@ManyToMany(mappedBy = "spaces")
+	//bi-directional many-to-many association to User
+	@ManyToMany
+	@JoinTable(
+		name="\"spaceuser\""
+		, joinColumns=@JoinColumn(name="SPACEID", nullable=false)
+		, inverseJoinColumns={
+			@JoinColumn(name="USERID", nullable=false)
+			}
+		)
 	private List<User> users;
 
 	public Space() {
@@ -74,29 +76,13 @@ public class Space implements Serializable {
 	public void setSpaceid(long spaceid) {
 		this.spaceid = spaceid;
 	}
-
-	public Boolean getActive() {
-		return this.active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-
+	
 	public Timestamp getCreated() {
 		return this.created;
 	}
 
 	public void setCreated(Timestamp created) {
 		this.created = created;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getDescription() {
@@ -107,6 +93,14 @@ public class Space implements Serializable {
 		this.description = description;
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Timestamp getUpdated() {
 		return this.updated;
 	}
@@ -115,12 +109,12 @@ public class Space implements Serializable {
 		this.updated = updated;
 	}
 
-	public long getUserid() {
-		return this.userid;
+	public List<User> getUsers() {
+		return this.users;
 	}
 
-	public void setUserid(long userid) {
-		this.userid = userid;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public List<Page> getPages() {
@@ -143,13 +137,5 @@ public class Space implements Serializable {
 		page.setSpace(null);
 
 		return page;
-	}
-
-	public List<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
 	}
 }

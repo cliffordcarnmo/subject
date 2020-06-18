@@ -36,9 +36,6 @@ public class Attachment implements Serializable {
 	@Column(unique = true, nullable = false)
 	private long attachmentid;
 
-	@Column(nullable = false)
-	private Boolean active;
-
 	@Lob
 	private String content;
 
@@ -71,14 +68,6 @@ public class Attachment implements Serializable {
 
 	public void setAttachmentid(long attachmentid) {
 		this.attachmentid = attachmentid;
-	}
-
-	public Boolean getActive() {
-		return this.active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	public String getContent() {

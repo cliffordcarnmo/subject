@@ -27,7 +27,6 @@ import se.subject.entities.Space;
 
 @Repository
 public interface ISpaceRepository extends CrudRepository<Space, Long> {
-	List<Space> findTop10ByActiveTrueOrderByUpdatedDesc();
-	List<Space> findAllByActiveTrueOrderByUpdatedDesc();
-	List<Space> findAllByActiveFalseOrderByUpdatedDesc();
+	List<Space> findTop10ByOrderByUpdatedDesc();
+	List<Space> findAllByOrderByUpdatedDesc();
 }

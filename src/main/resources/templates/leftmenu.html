@@ -2,20 +2,18 @@
 
 <h3>Spaces</h3>
 <nav class="nav flex-column">
-	<a class="nav-link" href="/">Index</a>
-	<th:block th:if="${session.user}">
-		<a class="nav-link" href="/space/create/">Create Space</a>
-	</th:block>
 	<th:block th:if="${space}">
+		<a class="nav-link" href="/">Index</a>
 		<h3>Current Space</h3>
 		<a class="nav-link" th:text="${space.getName()}" th:href="'/space/' + ${space.getSpaceid()}"></a>
 	</th:block>
+	<a th:each="all : ${allSpaces}" class="nav-link" th:text="${all.getName()}" th:href="${'/space/' + all.getSpaceid()}"></a>
 </nav>
 
-<th:block th:if="${space} and ${pages} and ${pages.size()} gt 0">
+<th:block th:if="${space} and ${leftMenuTop10Pages} and ${leftMenuTop10Pages.size()} gt 0">
 	<h3>Recent Pages</h3>
 	<nav class="nav flex-column">
-		<a th:each="page : ${pages}" class="nav-link" th:text="${page.getName()}" th:href="${'/space/' + space.getSpaceid() + '/page/' + page.getPageid()}"></a>
+		<a th:each="page : ${leftMenuTop10Pages}" class="nav-link" th:text="${page.getName()}" th:href="${'/space/' + space.getSpaceid() + '/page/' + page.getPageid()}"></a>
 	</nav>
 </th:block>
 

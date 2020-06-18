@@ -37,9 +37,6 @@ public class Page implements Serializable {
 	@Column(unique = true, nullable = false)
 	private long pageid;
 
-	@Column(nullable = false)
-	private Boolean active;
-
 	@Lob
 	private String content;
 
@@ -82,14 +79,6 @@ public class Page implements Serializable {
 
 	public void setPageid(long pageid) {
 		this.pageid = pageid;
-	}
-
-	public Boolean getActive() {
-		return this.active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	public String getContent() {

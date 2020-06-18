@@ -27,6 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,6 @@ import se.subject.entities.Space;
 import se.subject.entities.User;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
-import se.subject.repositories.IUserRepository;
 import se.subject.services.messages.IMessageService;
 
 @Controller
@@ -48,9 +50,6 @@ public class SpaceController {
 
 	@Autowired
 	private IPageRepository pageRepository;
-
-	@Autowired
-	private IUserRepository userRepository;
 
 	@GetMapping("/space/create")
 	public ModelAndView createSpace(HttpSession session) {
@@ -72,10 +71,11 @@ public class SpaceController {
 		modelAndView.setViewName("space");
 
 		if(spaceRepository.findById(spaceId).isPresent()){
-			modelAndView.addObject("userRepository", userRepository);
-			modelAndView.addObject("pages", pageRepository.findTop10ByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
-			modelAndView.addObject("allPages", pageRepository.findAllByActiveTrueAndSpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
-			modelAndView.addObject("space", spaceRepository.findById(spaceId).get());
+			Space space = spaceRepository.findById(spaceId).get();
+			modelAndView.addObject("spaceView", true);
+			modelAndView.addObject("space", space);
+			modelAndView.addObject("leftMenuTop10Pages", pageRepository.findTop10BySpaceOrderByUpdatedDesc(space));
+			modelAndView.addObject("allPages", pageRepository.findAllBySpaceOrderByUpdatedDesc(space));
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
@@ -84,23 +84,24 @@ public class SpaceController {
 	}
 
 	@PostMapping("/space")
-	public RedirectView saveSpace(@ModelAttribute("newSpace") Space newSpace, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView saveSpace(@ModelAttribute("newSpace") Space space, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 
 		if (session.getAttribute("user") == null) {
 			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (newSpace.getName().isEmpty()) {
+			if (space.getName().isEmpty()) {
 				redirectView.setUrl("/space/create");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreationMissingError"));
 			} else {
 				User user = (User)session.getAttribute("user");
-				
-				newSpace.setUserid(user.getUserid());
-				newSpace.setActive(true);
+				List<User> users = new ArrayList<User>();
 
-				Space createdSpace = spaceRepository.save(newSpace);
+				users.add(user);
+				space.setUsers(users);
+
+				Space createdSpace = spaceRepository.save(space);
 				
 				redirectView.setUrl("/space/" + createdSpace.getSpaceid());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreated"));

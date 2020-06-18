@@ -90,7 +90,6 @@ public class CredentialsController {
 
 				user.setEmail(email);
 				user.setName(name);
-				user.setActive(true);
 
 				HashMap<String, String> credentials = credentialService.generateCredentials(password);
 				password = "";

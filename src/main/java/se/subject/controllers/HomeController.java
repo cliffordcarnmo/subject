@@ -27,27 +27,23 @@ import javax.servlet.http.HttpSession;
 
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
-import se.subject.repositories.IUserRepository;
 
 @Controller
 public class HomeController {
 	@Autowired
-	private IUserRepository userRepository;
-
-	@Autowired
 	private ISpaceRepository spaceRepository;
-
+	
 	@Autowired
 	private IPageRepository pageRepository;
-	
+
 	@GetMapping("/")
 	public ModelAndView home(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
-		modelAndView.addObject("userRepository", userRepository);
-		modelAndView.addObject("spaces", spaceRepository.findTop10ByActiveTrueOrderByUpdatedDesc());
-		modelAndView.addObject("pageRepository", pageRepository);
-
+		modelAndView.addObject("homeView",true);		
+		modelAndView.addObject("allSpaces",spaceRepository.findAll());		
+		modelAndView.addObject("spaces",spaceRepository.findTop10ByOrderByUpdatedDesc());		
+		modelAndView.addObject("pageRepository",pageRepository);		
 		return modelAndView;
 	}
 }
