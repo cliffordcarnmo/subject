@@ -20,7 +20,6 @@ package se.subject.controllers;
 
 import java.util.HashMap;
 
-import javax.management.modelmbean.ModelMBeanNotificationBroadcaster;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;

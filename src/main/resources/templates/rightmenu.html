@@ -1,25 +1,25 @@
 <div class="col-sm-2 p-4">
 
 <th:block th:if="${session.user} and ${homeView} eq true">
-	<h3>Create</h3>
+	<h4>Create</h4>
 	<p><a class="btn btn-primary" role="button" href="/space/create">Create space</a></p>
 </th:block>
 
 <th:block th:if="${space} and ${session.user} and ${spaceView} eq true">
-	<h3>Create</h3>
+	<h4>Create</h4>
 	<p><a class="btn btn-primary "role="button" th:href="${'/space/' + space.getSpaceid() + '/page/create/'}">Create Page</a></p>
 </th:block>
 
 <th:block th:if="${space} and ${spaceView} eq true">
-	<h3>Operators</h3>
+	<h4>Operators</h4>
 	<nav class="nav flex-column">
 		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getUserid()}"></a>
 	</nav>
-	<h3>Created</h3>
+	<h4>Created</h4>
 	<nav class="nav flex-column">
 		<p class="nav-link" th:text="${space.getCreated()}"></p>
 	</nav>
-	<h3>Modified</h3>
+	<h4>Modified</h4>
 	<nav class="nav flex-column">
 		<p class="nav-link" th:text="${space.getUpdated()}"></p>
 	</nav>
@@ -27,35 +27,35 @@
 
 <th:block th:if="${page} and ${pageView} eq true">
 	<th:block th:if="${session.user}">
-		<h3>Edit</h3>	
+		<h4>Edit</h4>
 		<th:block th:if="${page.getUser().getUserid()} eq ${session.user.getUserid()}">
 			<p><a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getPageid()}">Edit Page</a></p>
 		</th:block>
 	</th:block>
 
-	<h3>Author</h3>
+	<h4>Author</h4>
 	<nav class="nav flex-column">
 		<p><a class="nav-link" th:href="@{'/user/' + ${page.getUser().getUserid()}}" th:text="${page.getUser().getName()}"></a></p>
 	</nav>
-	<h3>Space</h3>
+	<h4>Space</h4>
 	<nav class="nav flex-column">
 		<p><a class="nav-link" th:text="${page.getSpace().getName()}" th:href="'/space/' + ${page.getSpace().getSpaceid()}"></a></p>
 	</nav>
 	<th:block th:if="${page.getParentid() gt 0}">
-		<h3>Parent Page</h3>
+		<h4>Parent Page</h4>
 		<nav class="nav flex-column">
 			<p class="nav-link" th:text="${page.getParentid().toString()}"></p>
 		</nav>
 	</th:block>
-	<h3>Created</h3>
+	<h4>Created</h4>
 	<nav class="nav flex-column">
 		<p class="nav-link" th:text="${page.getCreated()}"></p>
 	</nav>
-	<h3>Modified</h3>
+	<h4>Modified</h4>
 	<nav class="nav flex-column">
 		<p class="nav-link" th:text="${page.getUpdated()}"></p>
 	</nav>
-	<h3>Content length</h3>
+	<h4>Content length</h4>
 	<nav class="nav flex-column">
 		<p class="nav-link" th:text="${content.length() + ' bytes'}"></p>
 	</nav>
