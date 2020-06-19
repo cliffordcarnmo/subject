@@ -27,7 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "\"page\"")
+@Table(name = "\"PAGE\"")
 @NamedQuery(name = "Page.findAll", query = "SELECT p FROM Page p")
 public class Page implements Serializable {
 	private static final long serialVersionUID = 1L;

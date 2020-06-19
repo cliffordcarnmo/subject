@@ -26,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "\"attachment\"")
+@Table(name = "\"ATTACHMENT\"")
 @NamedQuery(name = "Attachment.findAll", query = "SELECT a FROM Attachment a")
 public class Attachment implements Serializable {
 	private static final long serialVersionUID = 1L;

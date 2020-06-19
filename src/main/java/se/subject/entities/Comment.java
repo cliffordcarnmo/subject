@@ -26,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "\"comment\"")
+@Table(name = "\"COMMENT\"")
 @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c")
 public class Comment implements Serializable {
 	private static final long serialVersionUID = 1L;

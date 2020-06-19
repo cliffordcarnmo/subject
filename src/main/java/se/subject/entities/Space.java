@@ -28,7 +28,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name="\"space\"")
+@Table(name="\"SPACE\"")
 @NamedQuery(name="Space.findAll", query="SELECT s FROM Space s")
 public class Space implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public class Space implements Serializable {
 	//bi-directional many-to-many association to User
 	@ManyToMany
 	@JoinTable(
-		name="\"spaceuser\""
+		name="\"SPACEUSER\""
 		, joinColumns=@JoinColumn(name="SPACEID", nullable=false)
 		, inverseJoinColumns={
 			@JoinColumn(name="USERID", nullable=false)
