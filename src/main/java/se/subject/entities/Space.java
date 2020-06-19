@@ -36,7 +36,7 @@ public class Space implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
-	private long spaceid;
+	private int spaceid;
 
 	@Column(nullable=false)
 	@CreationTimestamp
@@ -69,11 +69,11 @@ public class Space implements Serializable {
 	public Space() {
 	}
 
-	public long getSpaceid() {
+	public int getSpaceid() {
 		return this.spaceid;
 	}
 
-	public void setSpaceid(long spaceid) {
+	public void setSpaceid(int spaceid) {
 		this.spaceid = spaceid;
 	}
 	

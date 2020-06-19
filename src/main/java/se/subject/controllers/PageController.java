@@ -56,7 +56,7 @@ public class PageController {
 	private IPageRepository pageRepository;
 
 	@GetMapping("/space/{spaceId}/page/{pageId}")
-	public ModelAndView space(@PathVariable("spaceId") Long spaceId, @PathVariable("pageId") Long pageId) {
+	public ModelAndView space(@PathVariable("spaceId") int spaceId, @PathVariable("pageId") int pageId) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("page");
 		modelAndView.addObject("pageView", true);
@@ -86,7 +86,7 @@ public class PageController {
 	}
 
 	@GetMapping("/page/edit/{pageId}")
-	public ModelAndView editPage(@PathVariable("pageId") Long pageId, HttpSession session) {
+	public ModelAndView editPage(@PathVariable("pageId") int pageId, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("editPage");
 
@@ -105,7 +105,7 @@ public class PageController {
 	}
 
 	@GetMapping("/space/{spaceId}/page/create")
-	public ModelAndView createPage(@PathVariable("spaceId") Long spaceId, HttpSession session) {
+	public ModelAndView createPage(@PathVariable("spaceId") int spaceId, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("createPage");
 
@@ -176,7 +176,7 @@ public class PageController {
 				page.setName(values.getFirst("name"));
 				page.setContent(values.getFirst("content"));
 				page.setUser(user);
-				page.setSpace(spaceRepository.findById((Long.parseLong(values.getFirst("spaceid")))).get());
+				page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());
 
 				Page createdPage = pageRepository.save(page);
 

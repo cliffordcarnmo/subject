@@ -36,7 +36,7 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
-	private long userid;
+	private int userid;
 
 	@Column(nullable=false)
 	@CreationTimestamp
@@ -64,11 +64,11 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public long getUserid() {
+	public int getUserid() {
 		return this.userid;
 	}
 
-	public void setUserid(long userid) {
+	public void setUserid(int userid) {
 		this.userid = userid;
 	}
 

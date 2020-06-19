@@ -1,92 +1,83 @@
-create schema "subject";
-
--- user
-create table "subject"."user" (
-	userid bigint not null generated always as identity (start with 1, increment by 1),
-	name varchar(1024) not null,
-	email varchar(1024) not NULL unique,
-	salt varchar(1024) not null,
-	hash varchar(1024) not null,
-	created timestamp default current_timestamp not null,
-	updated timestamp default current_timestamp,
-	constraint user_pk primary key (userid)
+CREATE TABLE "subject"."space" (
+	spaceid INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	NAME VARCHAR(1024) NOT NULL,
+	CREATED TIMESTAMP DEFAULT current_timestamp NOT NULL,
+	UPDATED TIMESTAMP DEFAULT current_timestamp,
+	DESCRIPTION VARCHAR(1024),
+	CONSTRAINT SPACE_PK PRIMARY KEY (SPACEID)
 );
+CREATE UNIQUE INDEX "SQL0000000033-0efbcf46-0172-8a13-0a8a-0000667e4990" ON "subject"."space" (SPACEID);
 
--- space
-create table "subject"."space" (
-	spaceid bigint not null generated always as identity (start with 1, increment by 1),
-	name varchar(1024) not null,
-	description varchar(1024),
-	created timestamp default current_timestamp not null,
-	updated timestamp default current_timestamp,
-	constraint space_pk primary key (spaceid)
+CREATE TABLE "subject"."user" (
+	userid INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	NAME VARCHAR(1024) NOT NULL,
+	EMAIL VARCHAR(1024) NOT NULL,
+	SALT VARCHAR(1024) NOT NULL,
+	HASH VARCHAR(1024) NOT NULL,
+	CREATED TIMESTAMP DEFAULT current_timestamp NOT NULL,
+	UPDATED TIMESTAMP DEFAULT current_timestamp,
+	CONSTRAINT USER_PK PRIMARY KEY (USERID)
 );
+CREATE UNIQUE INDEX "SQL0000000031-a9a10f38-0172-8a13-0a8a-0000667e4990" ON "subject"."user" (EMAIL);
+CREATE UNIQUE INDEX "SQL0000000032-c13d4f3a-0172-8a13-0a8a-0000667e4990" ON "subject"."user" (USERID);
 
--- spaceuser
-create table "subject"."spaceuser" (
-	spaceuserid bigint not null generated always as identity (start with 1, increment by 1),
-	spaceid bigint not null,
-	userid bigint not null,
-	constraint spaceuser_pk primary key (spaceuserid),
-	constraint spaceuser_space_fk foreign key (spaceid) references "subject"."space"(spaceid),
-	constraint spaceuser_user_fk foreign key (userid) references "subject"."user"(userid)
+CREATE TABLE "subject"."page" (
+	pageid INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	USERID int NOT NULL,
+	SPACEID int NOT NULL,
+	PARENTID int,
+	NAME VARCHAR(1024) NOT NULL,
+	CONTENT CLOB,
+	CREATED TIMESTAMP DEFAULT current_timestamp NOT NULL,
+	UPDATED TIMESTAMP DEFAULT current_timestamp,
+	CONSTRAINT PAGE_PK PRIMARY KEY (PAGEID),
+	CONSTRAINT PAGE_SPACE_FK FOREIGN KEY (SPACEID) REFERENCES "subject"."space"(SPACEID),
+	CONSTRAINT PAGE_USER_FK FOREIGN KEY (USERID) REFERENCES "subject"."user"(USERID)
 );
+CREATE UNIQUE INDEX "SQL0000000038-0e6c0f61-0172-8a13-0a8a-0000667e4990" ON "subject"."page" (PAGEID);
+CREATE INDEX "SQL0000000039-361ccf63-0172-8a13-0a8a-0000667e4990" ON "subject"."page" (USERID);
+CREATE INDEX "SQL0000000040-ddce8f65-0172-8a13-0a8a-0000667e4990" ON "subject"."page" (SPACEID);
 
--- page
-create table "subject"."page" (
-	pageid bigint not null generated always as identity (start with 1, increment by 1),
-	userid bigint not null,
-	spaceid bigint not null,
-	parentid bigint,
-	name varchar(1024) not null,
-	content clob,
-	created timestamp default current_timestamp not null,
-	updated timestamp default current_timestamp,
-	constraint page_pk primary key (pageid),
-	constraint page_user_fk foreign key (userid) references "subject"."user"(userid),
-	constraint page_space_fk foreign key (spaceid) references "subject"."space"(spaceid)
+CREATE TABLE "subject"."spaceuser" (
+	spaceuserid INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	SPACEID int NOT NULL,
+	USERID int NOT NULL,
+	CONSTRAINT SPACEUSER_PK PRIMARY KEY (SPACEUSERID),
+	CONSTRAINT SPACEUSER_SPACE_FK FOREIGN KEY (SPACEID) REFERENCES "subject"."space"(SPACEID),
+	CONSTRAINT SPACEUSER_USER_FK FOREIGN KEY (USERID) REFERENCES "subject"."user"(USERID)
 );
+CREATE UNIQUE INDEX "SQL0000000035-f8b2cf53-0172-8a13-0a8a-0000667e4990" ON "subject"."spaceuser" (SPACEUSERID);
+CREATE INDEX "SQL0000000036-a05c8f55-0172-8a13-0a8a-0000667e4990" ON "subject"."spaceuser" (SPACEID);
+CREATE INDEX "SQL0000000037-48074f57-0172-8a13-0a8a-0000667e4990" ON "subject"."spaceuser" (USERID);
 
--- attachment
-create table "subject"."attachment" (
-	attachmentid bigint not null generated always as identity (start with 1, increment by 1),
-	userid bigint not null,
-	pageid bigint not null,
-	name varchar(1024) not null,
-	content clob,
-	created timestamp default current_timestamp not null,
-	updated timestamp default current_timestamp,
-	constraint attachment_pk primary key (attachmentid),
-	constraint attachment_user_fk foreign key (userid) references "subject"."user"(userid),
-	constraint attachment_page_fk foreign key (pageid) references "subject"."page"(pageid)
+CREATE TABLE "subject"."attachment" (
+	attachmentid INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	USERID int NOT NULL,
+	PAGEID int NOT NULL,
+	NAME VARCHAR(1024) NOT NULL,
+	CONTENT CLOB,
+	CREATED TIMESTAMP DEFAULT current_timestamp NOT NULL,
+	UPDATED TIMESTAMP DEFAULT current_timestamp,
+	CONSTRAINT ATTACHMENT_PK PRIMARY KEY (ATTACHMENTID),
+	CONSTRAINT ATTACHMENT_PAGE_FK FOREIGN KEY (PAGEID) REFERENCES "subject"."page"(PAGEID),
+	CONSTRAINT ATTACHMENT_USER_FK FOREIGN KEY (USERID) REFERENCES "subject"."user"(USERID)
 );
+CREATE UNIQUE INDEX "SQL0000000041-d7ea4f72-0172-8a13-0a8a-0000667e4990" ON "subject"."attachment" (ATTACHMENTID);
+CREATE INDEX "SQL0000000042-2fa38f74-0172-8a13-0a8a-0000667e4990" ON "subject"."attachment" (USERID);
+CREATE INDEX "SQL0000000043-475dcf76-0172-8a13-0a8a-0000667e4990" ON "subject"."attachment" (PAGEID);
 
--- comment
-create table "subject"."comment" (
-	commentid bigint not null generated always as identity (start with 1, increment by 1),
-	userid bigint not null,
-	pageid bigint not null,
-	parentid bigint,
-	content clob,
-	created timestamp default current_timestamp not null,
-	updated timestamp default current_timestamp,
-	constraint comment_pk primary key (commentid),
-	constraint comment_user_fk foreign key (userid) references "subject"."user"(userid),
-	constraint comment_page_fk foreign key (pageid) references "subject"."page"(pageid)
+CREATE TABLE "subject"."comment" (
+	commentid INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	USERID int NOT NULL,
+	PAGEID int NOT NULL,
+	PARENTID int,
+	CONTENT CLOB,
+	CREATED TIMESTAMP DEFAULT current_timestamp NOT NULL,
+	UPDATED TIMESTAMP DEFAULT current_timestamp,
+	CONSTRAINT COMMENT_PK PRIMARY KEY (COMMENTID),
+	CONSTRAINT COMMENT_PAGE_FK FOREIGN KEY (PAGEID) REFERENCES "subject"."page"(PAGEID),
+	CONSTRAINT COMMENT_USER_FK FOREIGN KEY (USERID) REFERENCES "subject"."user"(USERID)
 );
-
-CREATE INDEX "subject"."comment_user_idx" ON "subject"."comment" ("USERID" ASC);
-CREATE UNIQUE INDEX "page_unq" ON "subject"."page" ("PAGEID" ASC);
-CREATE INDEX "subject"."ATTACHMENT_USER_IDX" ON "subject"."attachment" ("USERID" ASC);
-CREATE UNIQUE INDEX "subject"."SPACE_UNQ" ON "subject"."space" ("SPACEID" ASC);
-CREATE INDEX "subject"."ATTACHMENT_USER_IDX" ON "subject"."attachment" ("PAGEID" ASC);
-CREATE INDEX "subject"."COMMENT_PAGE_IDX" ON "subject"."comment" ("PAGEID" ASC);
-CREATE UNIQUE INDEX "subject"."ATTACHMENT_UNQ" ON "subject"."attachment" ("ATTACHMENTID" ASC);
-CREATE INDEX "subject"."SPACEUSER_SPACE_IDX" ON "subject"."spaceuser" ("SPACEID" ASC);
-CREATE UNIQUE INDEX "subject"."COMMENT_UNQ" ON "subject"."comment" ("COMMENTID" ASC);
-CREATE INDEX "subject"."PAGE_SPACE_IDX" ON "subject"."page" ("SPACEID" ASC);
-CREATE INDEX "subject"."SPACEUSER_USER_IDX" ON "subject"."spaceuser" ("USERID" ASC);
-CREATE UNIQUE INDEX "subject"."SPACEUSER_UNQ" ON "subject"."spaceuser" ("SPACEUSERID" ASC);
-CREATE UNIQUE INDEX "subject"."USER_USER_UNQ" ON "subject"."user" ("USERID" ASC);
-CREATE UNIQUE INDEX "subject"."USER_EMAIL_UNQ" ON "subject"."user" ("EMAIL" ASC);
-CREATE INDEX "subject"."PAGE_USER_IDX" ON "subject"."page" ("USERID" ASC);
+CREATE UNIQUE INDEX "SQL0000000044-b1b0cf83-0172-8a13-0a8a-0000667e4990" ON "subject"."comment" (COMMENTID);
+CREATE INDEX "SQL0000000045-59728f85-0172-8a13-0a8a-0000667e4990" ON "subject"."comment" (USERID);
+CREATE INDEX "SQL0000000046-01354f87-0172-8a13-0a8a-0000667e4990" ON "subject"."comment" (PAGEID);

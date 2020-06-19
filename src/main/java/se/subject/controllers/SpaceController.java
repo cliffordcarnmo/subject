@@ -66,7 +66,7 @@ public class SpaceController {
 	}
 
 	@GetMapping("/space/{spaceId}")
-	public ModelAndView space(@PathVariable("spaceId") Long spaceId, HttpSession session) {
+	public ModelAndView space(@PathVariable("spaceId") int spaceId, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("space");
 

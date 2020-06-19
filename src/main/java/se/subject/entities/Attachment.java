@@ -34,7 +34,7 @@ public class Attachment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	private long attachmentid;
+	private int attachmentid;
 
 	@Lob
 	private String content;
@@ -62,11 +62,11 @@ public class Attachment implements Serializable {
 	public Attachment() {
 	}
 
-	public long getAttachmentid() {
+	public int getAttachmentid() {
 		return this.attachmentid;
 	}
 
-	public void setAttachmentid(long attachmentid) {
+	public void setAttachmentid(int attachmentid) {
 		this.attachmentid = attachmentid;
 	}
 

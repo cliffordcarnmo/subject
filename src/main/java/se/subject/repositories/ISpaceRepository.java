@@ -26,7 +26,7 @@ import org.springframework.stereotype.Repository;
 import se.subject.entities.Space;
 
 @Repository
-public interface ISpaceRepository extends CrudRepository<Space, Long> {
+public interface ISpaceRepository extends CrudRepository<Space, Integer> {
 	List<Space> findTop10ByOrderByUpdatedDesc();
 	List<Space> findAllByOrderByUpdatedDesc();
 }

@@ -34,7 +34,7 @@ public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	private long commentid;
+	private int commentid;
 
 	@Lob
 	private String content;
@@ -43,7 +43,7 @@ public class Comment implements Serializable {
 	@Column(nullable = false)
 	private Timestamp created;
 
-	private long parentid;
+	private int parentid;
 
 	@UpdateTimestamp
 	private Timestamp updated;
@@ -61,11 +61,11 @@ public class Comment implements Serializable {
 	public Comment() {
 	}
 
-	public long getCommentid() {
+	public int getCommentid() {
 		return this.commentid;
 	}
 
-	public void setCommentid(long commentid) {
+	public void setCommentid(int commentid) {
 		this.commentid = commentid;
 	}
 
@@ -85,11 +85,11 @@ public class Comment implements Serializable {
 		this.created = created;
 	}
 
-	public long getParentid() {
+	public int getParentid() {
 		return this.parentid;
 	}
 
-	public void setParentid(long parentid) {
+	public void setParentid(int parentid) {
 		this.parentid = parentid;
 	}
 

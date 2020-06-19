@@ -35,7 +35,7 @@ public class Page implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	private long pageid;
+	private int pageid;
 
 	@Lob
 	private String content;
@@ -47,7 +47,7 @@ public class Page implements Serializable {
 	@Column(nullable = false, length = 1024)
 	private String name;
 
-	private long parentid;
+	private int parentid;
 
 	@UpdateTimestamp
 	private Timestamp updated;
@@ -73,11 +73,11 @@ public class Page implements Serializable {
 	public Page() {
 	}
 
-	public long getPageid() {
+	public int getPageid() {
 		return this.pageid;
 	}
 
-	public void setPageid(long pageid) {
+	public void setPageid(int pageid) {
 		this.pageid = pageid;
 	}
 
@@ -105,11 +105,11 @@ public class Page implements Serializable {
 		this.name = name;
 	}
 
-	public long getParentid() {
+	public int getParentid() {
 		return this.parentid;
 	}
 
-	public void setParentid(long parentid) {
+	public void setParentid(int parentid) {
 		this.parentid = parentid;
 	}
 
