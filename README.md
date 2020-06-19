@@ -66,7 +66,7 @@ export PATH=$PATH:~/subject/derby/bin
 export PATH=$PATH:~/subject/maven/bin
 ```
 
-If run a distribution other than Ubuntu Linux, consult you distribution documentation on how to permanently add environment variables.
+If you run a distribution other than Ubuntu Linux, consult you distribution documentation on how to permanently add environment variables.
 
 **Logout and login again for these changes to be activated.**
 
