@@ -4,12 +4,12 @@
 	<h1 th:text="${'Edit ' + page.getName()}"></h1>
 	<form action="#" th:action="@{/page/edit}" th:object="${page}" method="post">
 		<div class="form-group">
-			<label for="pageid">Page ID</label>
-			<input readonly type="text" class="form-control" id="pageid" name="pageid" th:value="*{pageid}">
-		</div>
-		<div class="form-group">
 			<label for="name">Page name</label>
 			<input type="text" class="form-control" id="name" th:field="*{name}">
+		</div>
+		<div class="form-group">
+			<label for="url">Page URL</label>
+			<input disabled type="text" class="form-control" id="url" th:field="*{url}">
 		</div>
 		<div class="form-group">
 			<label for="content">Content</label>

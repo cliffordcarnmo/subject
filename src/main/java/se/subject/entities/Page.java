@@ -47,6 +47,9 @@ public class Page implements Serializable {
 	@Column(nullable = false, length = 1024)
 	private String name;
 
+	@Column(nullable = false, length = 1024)
+	private String url;
+
 	private int parentid;
 
 	@UpdateTimestamp
@@ -103,6 +106,14 @@ public class Page implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public int getParentid() {

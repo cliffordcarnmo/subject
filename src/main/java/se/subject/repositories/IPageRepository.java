@@ -19,6 +19,7 @@
 package se.subject.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -31,4 +32,5 @@ public interface IPageRepository extends CrudRepository<Page, Integer> {
 	List<Page> findTop5BySpaceOrderByUpdatedDesc(Space space);
 	List<Page> findTop10BySpaceOrderByUpdatedDesc(Space space);
 	List<Page> findAllBySpaceOrderByUpdatedDesc(Space space);
+	Optional<Page> findByUrl(String url);
 }

@@ -47,6 +47,9 @@ public class Space implements Serializable {
 
 	@Column(nullable=false, length=1024)
 	private String name;
+	
+	@Column(nullable = false, length = 1024)
+	private String url;
 
 	@UpdateTimestamp
 	private Timestamp updated;
@@ -101,6 +104,14 @@ public class Space implements Serializable {
 		this.name = name;
 	}
 
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 	public Timestamp getUpdated() {
 		return this.updated;
 	}

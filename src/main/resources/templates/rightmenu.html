@@ -7,13 +7,13 @@
 
 <th:block th:if="${space} and ${session.user} and ${spaceView} eq true">
 	<h4>Create</h4>
-	<p><a class="btn btn-primary "role="button" th:href="${'/space/' + space.getSpaceid() + '/page/create/'}">Create Page</a></p>
+	<p><a class="btn btn-primary "role="button" th:href="${'/space/' + space.getUrl() + '/page/create/'}">Create Page</a></p>
 </th:block>
 
 <th:block th:if="${space} and ${spaceView} eq true">
 	<h4>Operators</h4>
 	<nav class="nav flex-column">
-		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getUserid()}"></a>
+		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getEmail()}"></a>
 	</nav>
 	<h4>Created</h4>
 	<nav class="nav flex-column">
@@ -29,17 +29,21 @@
 	<th:block th:if="${session.user}">
 		<h4>Edit</h4>
 		<th:block th:if="${page.getUser().getUserid()} eq ${session.user.getUserid()}">
-			<p><a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getPageid()}">Edit Page</a></p>
+			<p><a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getUrl()}">Edit Page</a></p>
 		</th:block>
 	</th:block>
 
 	<h4>Author</h4>
 	<nav class="nav flex-column">
-		<p><a class="nav-link" th:href="@{'/user/' + ${page.getUser().getUserid()}}" th:text="${page.getUser().getName()}"></a></p>
+		<p><a class="nav-link" th:href="@{'/user/' + ${page.getUser().getEmail()}}" th:text="${page.getUser().getName()}"></a></p>
 	</nav>
 	<h4>Space</h4>
 	<nav class="nav flex-column">
-		<p><a class="nav-link" th:text="${page.getSpace().getName()}" th:href="'/space/' + ${page.getSpace().getSpaceid()}"></a></p>
+		<p><a class="nav-link" th:text="${page.getSpace().getName()}" th:href="'/space/' + ${page.getSpace().getUrl()}"></a></p>
+	</nav>
+	<h4>URL</h4>
+	<nav class="nav flex-column">
+		<p class="nav-link" th:text="${page.getUrl()}"></p>
 	</nav>
 	<th:block th:if="${page.getParentid() gt 0}">
 		<h4>Parent Page</h4>

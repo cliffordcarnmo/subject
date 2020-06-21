@@ -60,7 +60,7 @@ public class CredentialService implements ICredentialService {
 
 	@Override
 	public Optional<User> verifyCredentials(String email, String password) {
-		Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
+		Optional<User> user = userRepository.findByEmail(email);
 
 		if (user.isPresent()) {
 			Optional<String> encrypted = generateHash(password, user.get().getSalt());

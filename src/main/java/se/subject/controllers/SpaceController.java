@@ -65,14 +65,14 @@ public class SpaceController {
 		return modelAndView;
 	}
 
-	@GetMapping("/space/{spaceId}")
-	public ModelAndView space(@PathVariable("spaceId") int spaceId, HttpSession session) {
+	@GetMapping("/space/{spaceUrl}")
+	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("space");
-
-		if(spaceRepository.findById(spaceId).isPresent()){
-			Space space = spaceRepository.findById(spaceId).get();
-			modelAndView.addObject("spaceView", true);
+		modelAndView.addObject("spaceView", true);
+		
+		if(spaceRepository.findByUrl(spaceUrl).isPresent()){
+			Space space = spaceRepository.findByUrl(spaceUrl).get();
 			modelAndView.addObject("space", space);
 			modelAndView.addObject("leftMenuTop10Pages", pageRepository.findTop10BySpaceOrderByUpdatedDesc(space));
 			modelAndView.addObject("allPages", pageRepository.findAllBySpaceOrderByUpdatedDesc(space));
@@ -103,7 +103,7 @@ public class SpaceController {
 
 				Space createdSpace = spaceRepository.save(space);
 				
-				redirectView.setUrl("/space/" + createdSpace.getSpaceid());
+				redirectView.setUrl("/space/" + createdSpace.getUrl());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreated"));
 			}
 		}

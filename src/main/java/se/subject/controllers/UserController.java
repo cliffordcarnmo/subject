@@ -67,15 +67,15 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@GetMapping("/user/{userId}")
-	public ModelAndView userDetailsView(@PathVariable("userId") int userId, HttpSession session) {
+	@GetMapping("/user/{userEmail}")
+	public ModelAndView userDetailsView(@PathVariable("userEmail") String userEmail, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
 
 		modelAndView.addObject("allSpaces", spaceRepository.findAll());		
 		
-		if(userRepository.findById(userId).isPresent()){
-			modelAndView.addObject("user", userRepository.findById(userId).get());
+		if(userRepository.findByEmail(userEmail).isPresent()){
+			modelAndView.addObject("user", userRepository.findByEmail(userEmail).get());
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("userMissingError"));
 		}

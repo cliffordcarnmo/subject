@@ -1,14 +1,16 @@
 <div th:replace="header"></div>
 
-<h1 th:text="${space.getName()}"></h1>
-<h4 th:text="${space.getDescription()}"></h4>
-
-<th:block th:if="${allPages} and ${allPages.size()} gt 0">
-	<h3 class="pt-3">All Pages</h3>
-	<ul class="list-unstyled">
-		<li th:each="spacePage : ${allPages}"> <a th:text="${spacePage.getName()}" th:href="${'/space/' + spacePage.getSpace().getSpaceid() + '/page/' + spacePage.getPageid()}"></a> <small
-	class="text-muted" th:text="${spacePage.getUser().getName() + ', ' + spacePage.getUpdated()}"></small></li>
-	</ul>
+<th:block th:if="${space}">
+	<h1 th:text="${space.getName()}"></h1>
+	<h4 th:text="${space.getDescription()}"></h4>
+	
+	<th:block th:if="${allPages} and ${allPages.size()} gt 0">
+		<h3 class="pt-3">All Pages</h3>
+		<ul class="list-unstyled">
+			<li th:each="spacePage : ${allPages}"> <a th:text="${spacePage.getName()}" th:href="${'/space/' + spacePage.getSpace().getUrl() + '/' + spacePage.getUrl()}"></a> <small
+		class="text-muted" th:text="${spacePage.getUser().getName() + ', ' + spacePage.getUpdated()}"></small></li>
+		</ul>
+	</th:block>
 </th:block>
 
 <div th:replace="footer"></div>

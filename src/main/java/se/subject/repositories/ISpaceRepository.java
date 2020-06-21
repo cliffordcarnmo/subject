@@ -19,6 +19,7 @@
 package se.subject.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,5 @@ import se.subject.entities.Space;
 public interface ISpaceRepository extends CrudRepository<Space, Integer> {
 	List<Space> findTop10ByOrderByUpdatedDesc();
 	List<Space> findAllByOrderByUpdatedDesc();
+	Optional<Space> findByUrl(String url);
 }

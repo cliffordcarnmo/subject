@@ -55,20 +55,20 @@ public class PageController {
 	@Autowired
 	private IPageRepository pageRepository;
 
-	@GetMapping("/space/{spaceId}/page/{pageId}")
-	public ModelAndView space(@PathVariable("spaceId") int spaceId, @PathVariable("pageId") int pageId) {
+	@GetMapping("/space/{spaceUrl}/{pageUrl}")
+	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, @PathVariable("pageUrl") String pageUrl) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("page");
 		modelAndView.addObject("pageView", true);
 
-		if (spaceRepository.findById(spaceId).isPresent()) {
-			Space space = spaceRepository.findById(spaceId).get();
+		if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
+			Space space = spaceRepository.findByUrl(spaceUrl).get();
 			modelAndView.addObject("space", space);
 
-			if (pageRepository.findById(pageId).isPresent()) {
-				modelAndView.addObject("pages", pageRepository.findAllBySpaceOrderByUpdatedDesc(spaceRepository.findById(spaceId).get()));
+			if (pageRepository.findByUrl(pageUrl).isPresent()) {
+				modelAndView.addObject("pages", pageRepository.findAllBySpaceOrderByUpdatedDesc(spaceRepository.findByUrl(spaceUrl).get()));
 
-				Page page = pageRepository.findById(pageId).get();
+				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("page", page);
 
 				Parser parser = Parser.builder().build();
@@ -85,16 +85,16 @@ public class PageController {
 		return modelAndView;
 	}
 
-	@GetMapping("/page/edit/{pageId}")
-	public ModelAndView editPage(@PathVariable("pageId") int pageId, HttpSession session) {
+	@GetMapping("/page/edit/{pageUrl}")
+	public ModelAndView editPage(@PathVariable("pageUrl") String pageUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("editPage");
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (pageRepository.findById(pageId).isPresent()) {
-				Page page = pageRepository.findById(pageId).get();
+			if (pageRepository.findByUrl(pageUrl).isPresent()) {
+				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("page", page);
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("pageError"));
@@ -104,16 +104,16 @@ public class PageController {
 		return modelAndView;
 	}
 
-	@GetMapping("/space/{spaceId}/page/create")
-	public ModelAndView createPage(@PathVariable("spaceId") int spaceId, HttpSession session) {
+	@GetMapping("/space/{spaceUrl}/page/create")
+	public ModelAndView createPage(@PathVariable("spaceUrl") String spaceUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("createPage");
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (spaceRepository.findById(spaceId).isPresent()) {
-				Space space = spaceRepository.findById(spaceId).get();
+			if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
+				Space space = spaceRepository.findByUrl(spaceUrl).get();
 				modelAndView.addObject("space", space);
 				modelAndView.addObject("page", new Page());
 			} else {
@@ -135,8 +135,9 @@ public class PageController {
 			if (newPage.getName().isEmpty()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
 			} else {
-				Page oldPage = pageRepository.findById(newPage.getPageid()).get();
+				Page oldPage = pageRepository.findByUrl(newPage.getUrl()).get();
 
+				oldPage.setPageid(newPage.getPageid());
 				oldPage.setContent(newPage.getContent());
 				oldPage.setName(newPage.getName());
 
@@ -147,7 +148,7 @@ public class PageController {
 
 				spaceRepository.save(space);
 				
-				redirectView.setUrl("/space/" + String.valueOf(oldPage.getSpace().getSpaceid()) + "/page/" + oldPage.getPageid());
+				redirectView.setUrl("/space/" + oldPage.getSpace().getUrl() + "/" + oldPage.getUrl());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
 			}
 		}
@@ -165,29 +166,34 @@ public class PageController {
 
 			return redirectView;
 		} else {
-			if (values.getFirst("name").isEmpty()) {
+			if (values.getFirst("name").isEmpty() || values.getFirst("url").isEmpty()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationMissingError"));
 
 				return redirectView;
 			} else {
-				User user = (User) session.getAttribute("user");
-				Page page = new Page();
-
-				page.setName(values.getFirst("name"));
-				page.setContent(values.getFirst("content"));
-				page.setUser(user);
-				page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());
-
-				Page createdPage = pageRepository.save(page);
-
-				Space space = createdPage.getSpace();
-				space.setUpdated(createdPage.getUpdated());
-
-				spaceRepository.save(space);
-
-				redirectView.setUrl("/space/" + String.valueOf(createdPage.getSpace().getSpaceid()) + "/page/" + createdPage.getPageid());
-				redirectAttributes.addFlashAttribute("user", user);
-				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreated"));
+				if (pageRepository.findByUrl(values.getFirst("url")).isPresent()) {
+					redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationUrlExistsError"));
+				} else {
+					User user = (User) session.getAttribute("user");
+					Page page = new Page();
+	
+					page.setName(values.getFirst("name"));
+					page.setUrl(values.getFirst("url"));
+					page.setContent(values.getFirst("content"));
+					page.setUser(user);
+					page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());
+	
+					Page createdPage = pageRepository.save(page);
+	
+					Space space = createdPage.getSpace();
+					space.setUpdated(createdPage.getUpdated());
+	
+					spaceRepository.save(space);
+	
+					redirectView.setUrl("/space/" + createdPage.getSpace().getUrl() + "/" + createdPage.getUrl());
+					redirectAttributes.addFlashAttribute("user", user);
+					redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreated"));
+				}
 			}
 		}
 		return redirectView;
