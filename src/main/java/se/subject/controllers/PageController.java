@@ -125,21 +125,21 @@ public class PageController {
 	}
 
 	@PostMapping("/page/edit")
-	public RedirectView updatePage(@ModelAttribute("page") Page newPage, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView updatePage(@ModelAttribute("page") Page page, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/");
 
 		if (session.getAttribute("user") == null) {
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (newPage.getName().isEmpty()) {
+			if (page.getName().isEmpty() || page.getUrl().isEmpty()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
 			} else {
-				Page oldPage = pageRepository.findByUrl(newPage.getUrl()).get();
+				Page oldPage = pageRepository.findByUrl(page.getUrl()).get();
 
-				oldPage.setPageid(newPage.getPageid());
-				oldPage.setContent(newPage.getContent());
-				oldPage.setName(newPage.getName());
+				oldPage.setContent(page.getContent());
+				oldPage.setName(page.getName());
+				oldPage.setUrl(page.getUrl());
 
 				pageRepository.save(oldPage);
 
