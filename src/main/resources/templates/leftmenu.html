@@ -2,19 +2,12 @@
 
 <h4>Spaces</h4>
 <nav class="nav flex-column">
+	<a class="nav-link" href="/">New and recently updated</a>
+	<a class="nav-link" href="/space/">All</a>
 	<th:block th:if="${space}">
-		<a class="nav-link" href="/">Index</a>
 		<h4>Current Space</h4>
 		<a class="nav-link" th:text="${space.getName()}" th:href="'/space/' + ${space.getUrl()}"></a>
 	</th:block>
-	<a th:each="all : ${allSpaces}" class="nav-link" th:text="${all.getName()}" th:href="${'/space/' + all.getUrl()}"></a>
 </nav>
-
-<th:block th:if="${space} and ${leftMenuTop10Pages} and ${leftMenuTop10Pages.size()} gt 0">
-	<h4>Recent Pages</h4>
-	<nav class="nav flex-column">
-		<a th:each="page : ${leftMenuTop10Pages}" class="nav-link" th:text="${page.getName()}" th:href="${'/space/' + space.getUrl() + '/' + page.getUrl()}"></a>
-	</nav>
-</th:block>
 
 </div>

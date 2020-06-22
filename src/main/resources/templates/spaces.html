@@ -1,7 +1,7 @@
 <div th:replace="header"></div>
 
 <th:block th:if="${spaces} and ${spaces.size()} gt 0">
-	<h1 class="pb-3">New and recently updated</h1>
+	<h1 class="pb-3">All Spaces</h1>
 	<div th:each="space : ${spaces}" class="card mb-3">
 		<div class="h2 card-header"><a th:text="${space.getName()}" th:href="@{'/space/' + ${space.getUrl()}}"></a></div>
 		<div class="card-body">
@@ -11,9 +11,6 @@
 			<p class="text-muted card-subtitle" th:text="${'Updated ' + space.getUpdated()}"></p>
 			<div class="card-text">
 				<p class="text-muted">Operators: <a th:each="operators: ${space.getUsers()}" th:text="${operators.getName() + ' '}" th:href="@{'/user/' + ${operators.getEmail()}}"></a></p>
-				<ul class="list-unstyled"> 
-					<li th:each="spacePages : ${pageRepository.findTop5BySpaceOrderByUpdatedDesc(space)}"> <a th:text="${spacePages.getName()}" th:href="${'/space/' + spacePages.getSpace().getUrl() + '/' + spacePages.getUrl()}"></a> <small class="text-muted" th:text="${spacePages.getUser().getName() + ', ' + spacePages.getUpdated()}"></small></li>
-				</ul>
 			</div>
 		</div>
 	</div>

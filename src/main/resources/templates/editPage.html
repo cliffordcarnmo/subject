@@ -1,6 +1,6 @@
 <div th:replace="header"></div>
 
-<th:block th:if="${session.user} and ${page}">
+<th:block th:if="${session.user} and ${page} and ${page.getSpace().getOperator(session.user)}">
 	<h1 th:text="${'Edit ' + page.getName()}"></h1>
 	<form action="#" th:action="@{/page/edit}" th:object="${page}" method="post">
 		<div class="form-group">

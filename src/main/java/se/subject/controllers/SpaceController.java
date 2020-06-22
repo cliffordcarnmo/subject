@@ -51,6 +51,14 @@ public class SpaceController {
 	@Autowired
 	private IPageRepository pageRepository;
 
+	@GetMapping("/space/")
+	public ModelAndView allSpaces(HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("spaces");
+		modelAndView.addObject("spaces",spaceRepository.findAllByOrderByUpdatedDesc());		
+		return modelAndView;
+	}
+
 	@GetMapping("/space/create")
 	public ModelAndView createSpace(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -65,16 +73,34 @@ public class SpaceController {
 		return modelAndView;
 	}
 
+	@GetMapping("/space/edit/{spaceUrl}")
+	public ModelAndView editSpace(@PathVariable("spaceUrl") String spaceUrl, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("editSpace");
+
+		if (session.getAttribute("user") == null) {
+			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
+		} else {
+			if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
+				Space space = spaceRepository.findByUrl(spaceUrl).get();
+				modelAndView.addObject("space", space);
+			} else {
+				modelAndView.addObject("message", messageService.getMessage("spaceError"));
+			}
+		}
+
+		return modelAndView;
+	}
+
 	@GetMapping("/space/{spaceUrl}")
 	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("space");
 		modelAndView.addObject("spaceView", true);
-		
+
 		if(spaceRepository.findByUrl(spaceUrl).isPresent()){
 			Space space = spaceRepository.findByUrl(spaceUrl).get();
 			modelAndView.addObject("space", space);
-			modelAndView.addObject("leftMenuTop10Pages", pageRepository.findTop10BySpaceOrderByUpdatedDesc(space));
 			modelAndView.addObject("allPages", pageRepository.findAllBySpaceOrderByUpdatedDesc(space));
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
@@ -83,15 +109,15 @@ public class SpaceController {
 		return modelAndView;
 	}
 
-	@PostMapping("/space")
-	public RedirectView saveSpace(@ModelAttribute("newSpace") Space space, HttpSession session, RedirectAttributes redirectAttributes) {
+	@PostMapping("/space/create")
+	public RedirectView createSpace(@ModelAttribute("newSpace") Space space, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 
 		if (session.getAttribute("user") == null) {
 			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (space.getName().isEmpty()) {
+			if (space.getName().isEmpty() || space.getUrl().isEmpty()) {
 				redirectView.setUrl("/space/create");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreationMissingError"));
 			} else {
@@ -110,4 +136,33 @@ public class SpaceController {
 
 		return redirectView;
 	}
+
+	@PostMapping("/space/edit")
+	public RedirectView editSpace(@ModelAttribute("space") Space space, HttpSession session, RedirectAttributes redirectAttributes) {
+		RedirectView redirectView = new RedirectView();
+
+		if (session.getAttribute("user") == null) {
+			redirectView.setUrl("/");
+			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
+		} else {
+			if (space.getName().isEmpty() || space.getUrl().isEmpty()) {
+				redirectView.setUrl("/");
+				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdateMissingError"));
+			} else {
+
+				Space oldSpace = spaceRepository.findByUrl(space.getUrl()).get();
+
+				oldSpace.setName(space.getName());
+				oldSpace.setDescription(space.getDescription());
+				
+				spaceRepository.save(oldSpace);
+
+				redirectView.setUrl("/space/edit/" + oldSpace.getUrl());
+				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdated"));
+			}
+		}
+
+		return redirectView;
+	}
+
 }

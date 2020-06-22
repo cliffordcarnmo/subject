@@ -120,6 +120,16 @@ public class Space implements Serializable {
 		this.updated = updated;
 	}
 
+	public Boolean getOperator(User user) {
+		for (User u : getUsers()) {
+			if (u.getUserid() == user.getUserid()) {
+				return true;
+			}
+		}
+	
+		return false;
+	}
+
 	public List<User> getUsers() {
 		return this.users;
 	}

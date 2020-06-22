@@ -2,7 +2,7 @@
 
 <th:block th:if="${session.user} and ${space}">
 	<h1 th:text="${'Create a new Page in ' + space.getName()}"></h1>
-	<form action="#" th:action="@{/page}" method="post">
+	<form action="#" th:action="@{/page/create}" method="post">
 		<div class="form-group">
 			<label for="name">Page name</label>
 			<input type="text" class="form-control" id="name" name="name" placeholder="Page name">

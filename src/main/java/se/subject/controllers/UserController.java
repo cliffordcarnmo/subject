@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import se.subject.entities.User;
-import se.subject.repositories.ISpaceRepository;
+import se.subject.repositories.IPageRepository;
 import se.subject.repositories.IUserRepository;
 import se.subject.services.messages.IMessageService;
 import se.subject.services.security.ICredentialService;
@@ -51,7 +51,7 @@ public class UserController {
 	private IUserRepository userRepository;
 
 	@Autowired
-	private ISpaceRepository spaceRepository;
+	private IPageRepository pageRepository;
 
 	@GetMapping("/edituser")
 	public ModelAndView userView(HttpSession session) {
@@ -72,10 +72,10 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
 
-		modelAndView.addObject("allSpaces", spaceRepository.findAll());		
-		
 		if(userRepository.findByEmail(userEmail).isPresent()){
-			modelAndView.addObject("user", userRepository.findByEmail(userEmail).get());
+			User user = userRepository.findByEmail(userEmail).get();
+			modelAndView.addObject("user", user);
+			modelAndView.addObject("pages", pageRepository.findAllByUserOrderByUpdatedDesc(user));
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("userMissingError"));
 		}

@@ -26,11 +26,13 @@ import org.springframework.stereotype.Repository;
 
 import se.subject.entities.Page;
 import se.subject.entities.Space;
+import se.subject.entities.User;
 
 @Repository
 public interface IPageRepository extends CrudRepository<Page, Integer> {
 	List<Page> findTop5BySpaceOrderByUpdatedDesc(Space space);
 	List<Page> findTop10BySpaceOrderByUpdatedDesc(Space space);
 	List<Page> findAllBySpaceOrderByUpdatedDesc(Space space);
+	List<Page> findAllByUserOrderByUpdatedDesc(User user);
 	Optional<Page> findByUrl(String url);
 }

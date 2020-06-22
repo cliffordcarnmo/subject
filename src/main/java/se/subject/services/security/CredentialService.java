@@ -43,7 +43,7 @@ public class CredentialService implements ICredentialService {
 	private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 	private static final int KEY_LENGTH = 512;
 	private static final int ITERATIONS = 65536;
-
+	
 	@Override
 	public HashMap<String, String> generateCredentials(String password) {
 		HashMap<String, String> credentials = new HashMap<String, String>();

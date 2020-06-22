@@ -1,8 +1,17 @@
 <div th:replace="header"></div>
 
 <th:block th:if="${user}">
-	<h1 class="pb-3" th:text="${user.getName()}"></h1>
+	<h1 th:text="${user.getName()}"></h1>
 	<h4 th:text="${user.getEmail()}"></h4>
+
+	<th:block th:if="${pages} and ${pages.size()} gt 0">
+		<h3 class="pt-3">Pages</h3>
+		<ul class="list-unstyled">
+			<li th:each="page : ${pages}"> <a th:text="${page.getName()}" th:href="${'/space/' + page.getSpace().getUrl() + '/' + page.getUrl()}"></a> <a class="small text-muted" th:text="${page.getSpace().getName()}" th:href="${'/space/' + page.getSpace().getUrl()}"> </a> <small
+		class="text-muted" th:text="${page.getUpdated()}"></small></li>
+		</ul>
+	</th:block>
+
 </th:block>
 
 <div th:replace="footer"></div>

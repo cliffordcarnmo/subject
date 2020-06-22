@@ -2,7 +2,7 @@
 
 <th:block th:if="${session.user}">
 	<h1>Create a new Space</h1>
-	<form action="#" th:action="@{/space}" th:object="${newSpace}" method="post">
+	<form action="#" th:action="@{/space/create}" th:object="${newSpace}" method="post">
 		<div class="form-group">
 			<label for="name">Space name</label>
 			<input type="text" class="form-control" id="name" name="name" placeholder="Space name">

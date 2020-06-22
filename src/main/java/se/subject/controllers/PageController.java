@@ -56,7 +56,7 @@ public class PageController {
 	private IPageRepository pageRepository;
 
 	@GetMapping("/space/{spaceUrl}/{pageUrl}")
-	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, @PathVariable("pageUrl") String pageUrl) {
+	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, @PathVariable("pageUrl") String pageUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("page");
 		modelAndView.addObject("pageView", true);
@@ -156,8 +156,8 @@ public class PageController {
 		return redirectView;
 	}
 
-	@PostMapping("/page")
-	public RedirectView savePage(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
+	@PostMapping("/page/create")
+	public RedirectView createPage(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/");
 

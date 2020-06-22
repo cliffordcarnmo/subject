@@ -40,10 +40,10 @@ public class HomeController {
 	public ModelAndView home(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
-		modelAndView.addObject("homeView",true);		
-		modelAndView.addObject("allSpaces",spaceRepository.findAllByOrderByUpdatedDesc());		
-		modelAndView.addObject("spaces",spaceRepository.findTop10ByOrderByUpdatedDesc());		
-		modelAndView.addObject("pageRepository",pageRepository);		
+		modelAndView.addObject("homeView",true);
+		modelAndView.addObject("spaces", spaceRepository.findTop10ByOrderByUpdatedDesc());		
+		modelAndView.addObject("pageRepository", pageRepository);
+		
 		return modelAndView;
 	}
 }
