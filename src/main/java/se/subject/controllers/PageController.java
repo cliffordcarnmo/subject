@@ -71,6 +71,10 @@ public class PageController {
 				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("page", page);
 
+				if( !page.getComments().isEmpty()) {
+					modelAndView.addObject("comments", page.getComments());
+				}
+
 				Parser parser = Parser.builder().build();
 				Node document = parser.parse(page.getContent());
 				HtmlRenderer renderer = HtmlRenderer.builder().build();
@@ -81,7 +85,7 @@ public class PageController {
 		} else {
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
-
+		
 		return modelAndView;
 	}
 

@@ -127,6 +127,8 @@ public class CredentialsController {
 			password = "";
 
 			if (user.isPresent()) {
+				user.get().setHash("");
+				user.get().setSalt("");
 				session.setAttribute("user", user.get());
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsVerified"));
@@ -134,6 +136,7 @@ public class CredentialsController {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsNotFoundError"));
 			}
 		}
+		
 		return redirectView;
 	}
 }
