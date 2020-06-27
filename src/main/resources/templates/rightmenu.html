@@ -1,17 +1,6 @@
 <div class="col-sm-2 p-4">
 
-<th:block th:if="${session.user} and ${homeView}">
-	<h4>Manage</h4>
-	<p><a class="btn btn-primary" role="button" href="/space/create">Create space</a></p>
-</th:block>
-
 <th:block th:if="${space} and ${spaceView}">
-	<th:block th:if="${session.user} and ${space.getOperator(session.user)}">
-		<h4>Manage</h4>
-		<p><a class="btn btn-primary "role="button" th:href="${'/space/' + space.getUrl() + '/page/create/'}">Create Page</a></p>
-		<p><a class="btn btn-primary "role="button" th:href="${'/space/edit/' + space.getUrl()}">Edit space</a></p>
-	</th:block>
-
 	<h4>Operators</h4>
 	<nav class="nav flex-column">
 		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getEmail()}"></a>
@@ -27,10 +16,6 @@
 </th:block>
 
 <th:block th:if="${page} and ${pageView}">
-	<th:block th:if="${session.user} and ${space.getOperator(session.user)}">
-		<h4>Manage</h4>
-		<p><a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getUrl()}">Edit Page</a></p>
-	</th:block>
 	<h4>Author</h4>
 	<nav class="nav flex-column">
 		<p><a class="nav-link" th:href="@{'/user/' + ${page.getUser().getEmail()}}" th:text="${page.getUser().getName()}"></a></p>

@@ -12,9 +12,11 @@
 		<ul class="list-unstyled">
 			<li th:each="comment : ${comments}"> <span th:text="${comment.getContent()}"></span> <small
 		class="text-muted" th:text="${comment.getUser().getName() + ', ' + comment.getUpdated()}"></small>
+			<!--
 			<th:block th:if="${session.user}">
 				<a href="#" class="btn btn-primary btn-sm" role="button">Reply</a>
 			</th:block>
+			-->
 			</li>
 		</ul>
 	</th:block>

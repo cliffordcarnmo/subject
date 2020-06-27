@@ -93,12 +93,14 @@ public class PageController {
 	public ModelAndView editPage(@PathVariable("pageUrl") String pageUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("editPage");
+		modelAndView.addObject("pageEdit", true);
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
 		} else {
 			if (pageRepository.findByUrl(pageUrl).isPresent()) {
 				Page page = pageRepository.findByUrl(pageUrl).get();
+				modelAndView.addObject("space", page.getSpace());
 				modelAndView.addObject("page", page);
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("pageError"));
