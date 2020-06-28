@@ -9,13 +9,16 @@
 		</div>
 		<div class="form-group">
 			<label for="url">Permalink</label>
-			<input type="text" class="form-control" id="url" name="url" placeholder="give-your-page-a-descriptive-permalink">
+			<input type="text" class="form-control" id="pageUrl" placeholder="give-your-page-a-descriptive-permalink">
+		<div class="invalid-feedback">
+			That permalink address is already registered.
+		</div>
 		</div>
 		<div class="form-group">
 			<label for="content">Content</label>
 			<textarea rows="20" class="form-control" id="content" name="content" placeholder="Page content"></textarea>
 		</div>
-		<button type="submit" class="btn btn-primary">Create Page</button>
+		<button type="submit" id="pageUrlSubmit" class="btn btn-primary">Create Page</button>
 		<input type="hidden" id="spaceid" name="spaceid" th:value="${space.getSpaceid()}">
 	</form>
 </th:block>

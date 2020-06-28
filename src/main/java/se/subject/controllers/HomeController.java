@@ -18,18 +18,24 @@
 
 package se.subject.controllers;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+//import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
+//import se.subject.services.logging.ILoggingService;
 
 @Controller
 public class HomeController {
+	//@Autowired
+	//private ILoggingService loggingService;
+
 	@Autowired
 	private ISpaceRepository spaceRepository;
 	
@@ -43,6 +49,8 @@ public class HomeController {
 		modelAndView.addObject("homeView",true);
 		modelAndView.addObject("spaces", spaceRepository.findTop10ByOrderByUpdatedDesc());		
 		modelAndView.addObject("pageRepository", pageRepository);
+		
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 		
 		return modelAndView;
 	}

@@ -1,16 +1,14 @@
-<th:fragment="commentFragment">
-	<th:block th:if="${session.user} and ${page}">
-		<hr/>
-		<h1>Comment</h1>
-		<form action="#" th:action="@{/comment/create}" method="post">
-			<div class="form-group">
-				<textarea rows="5" class="form-control" name="content" id="content" placeholder="Your comment..."></textarea>
-			</div>
-			<button type="submit" class="btn btn-primary">Create Comment</button>
-			<input type="hidden" id="pageurl" name="pageurl" th:value="${page.getUrl()}">
-			<th:block th:if="${comment}">
-				<input type="hidden" name="parentid" id="parentid" th:field="${comment.parentid}" th:value="${comment.getCommentid()}">
-			</th:block>
-		</form>
-	</th:block>
-</th:fragment>
+<th:block th:if="${session.user} and ${page}">
+	<hr/>
+	<h1>Comment</h1>
+	<form action="#" th:action="@{/comment/create}" method="post">
+		<div class="form-group">
+			<textarea rows="5" class="form-control" name="content" id="content" placeholder="Your comment..."></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Create Comment</button>
+		<input type="hidden" id="pageurl" name="pageurl" th:value="${page.getUrl()}">
+		<th:block th:if="${comment}">
+			<input type="hidden" name="parentid" id="parentid" th:field="${comment.parentid}" th:value="${comment.getCommentid()}">
+		</th:block>
+	</form>
+</th:block>

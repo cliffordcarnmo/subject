@@ -1,9 +1,13 @@
 <div class="col-sm-2 p-4">
 
-<th:block th:if="${space} and ${spaceView}">
+<th:block th:if="${space} and ${spaceView} or ${spaceEdit}">
 	<h4>Operators</h4>
 	<nav class="nav flex-column">
 		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getEmail()}"></a>
+	</nav>
+	<h4>Permalink</h4>
+	<nav class="nav flex-column">
+		<a class="nav-link" th:href="${space.getPermalink()}" th:text="${space.getPermalink()}"></a>
 	</nav>
 	<h4>Created</h4>
 	<nav class="nav flex-column">
@@ -24,9 +28,9 @@
 	<nav class="nav flex-column">
 		<p><a class="nav-link" th:text="${page.getSpace().getName()}" th:href="'/space/' + ${page.getSpace().getUrl()}"></a></p>
 	</nav>
-	<h4>URL</h4>
+	<h4>Permalink</h4>
 	<nav class="nav flex-column">
-		<p class="nav-link" th:text="${page.getUrl()}"></p>
+		<a class="nav-link" th:href="${page.getPermalink()}" th:text="${page.getPermalink()}"></a>
 	</nav>
 	<th:block th:if="${page.getParentid() gt 0}">
 		<h4>Parent Page</h4>

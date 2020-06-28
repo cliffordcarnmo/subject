@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
+//import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -38,10 +39,14 @@ import se.subject.entities.Space;
 import se.subject.entities.User;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
+import se.subject.services.logging.ILoggingService;
 import se.subject.services.messages.IMessageService;
 
 @Controller
 public class SpaceController {
+	@Autowired
+	ILoggingService loggingService;
+
 	@Autowired
 	private IMessageService messageService;
 
@@ -56,6 +61,9 @@ public class SpaceController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("spaces");
 		modelAndView.addObject("spaces",spaceRepository.findAllByOrderByUpdatedDesc());		
+
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
+
 		return modelAndView;
 	}
 
@@ -70,6 +78,8 @@ public class SpaceController {
 			modelAndView.addObject("newSpace", new Space());
 		}
 
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
+
 		return modelAndView;
 	}
 
@@ -77,6 +87,7 @@ public class SpaceController {
 	public ModelAndView editSpace(@PathVariable("spaceUrl") String spaceUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("editSpace");
+		modelAndView.addObject("spaceEdit", true);
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
@@ -88,6 +99,8 @@ public class SpaceController {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}
 		}
+
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}
@@ -105,6 +118,8 @@ public class SpaceController {
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
+
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}

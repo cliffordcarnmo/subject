@@ -29,6 +29,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+//import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +42,17 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import se.subject.entities.Page;
 import se.subject.entities.Space;
 import se.subject.entities.User;
+import se.subject.repositories.ICommentRepository;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
+import se.subject.services.logging.ILoggingService;
 import se.subject.services.messages.IMessageService;
 
 @Controller
 public class PageController {
+	@Autowired
+	ILoggingService loggingService;
+
 	@Autowired
 	private IMessageService messageService;
 
@@ -54,6 +61,9 @@ public class PageController {
 
 	@Autowired
 	private IPageRepository pageRepository;
+
+	@Autowired
+	private ICommentRepository commentRepository;
 
 	@GetMapping("/space/{spaceUrl}/{pageUrl}")
 	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, @PathVariable("pageUrl") String pageUrl, HttpSession session) {
@@ -72,7 +82,7 @@ public class PageController {
 				modelAndView.addObject("page", page);
 
 				if( !page.getComments().isEmpty()) {
-					modelAndView.addObject("comments", page.getComments());
+					modelAndView.addObject("comments", commentRepository.findAllByPageOrderByUpdatedDesc(page));
 				}
 
 				Parser parser = Parser.builder().build();
@@ -85,7 +95,9 @@ public class PageController {
 		} else {
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
-		
+
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
+
 		return modelAndView;
 	}
 
@@ -107,6 +119,8 @@ public class PageController {
 			}
 		}
 
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
+
 		return modelAndView;
 	}
 
@@ -126,6 +140,8 @@ public class PageController {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}
 		}
+
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}
@@ -177,14 +193,14 @@ public class PageController {
 
 				return redirectView;
 			} else {
-				if (pageRepository.findByUrl(values.getFirst("url")).isPresent()) {
+				if (pageRepository.findByUrl(values.getFirst("pageUrl")).isPresent()) {
 					redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationUrlExistsError"));
 				} else {
 					User user = (User) session.getAttribute("user");
 					Page page = new Page();
 	
 					page.setName(values.getFirst("name"));
-					page.setUrl(values.getFirst("url"));
+					page.setUrl(values.getFirst("pageUrl"));
 					page.setContent(values.getFirst("content"));
 					page.setUser(user);
 					page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());

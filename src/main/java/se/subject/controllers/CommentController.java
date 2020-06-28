@@ -32,10 +32,14 @@ import se.subject.entities.Page;
 import se.subject.entities.User;
 import se.subject.repositories.ICommentRepository;
 import se.subject.repositories.IPageRepository;
+import se.subject.services.logging.ILoggingService;
 import se.subject.services.messages.IMessageService;
 
 @Controller
 public class CommentController {
+	@Autowired
+	ILoggingService loggingService;
+
 	@Autowired
 	private IMessageService messageService;
 

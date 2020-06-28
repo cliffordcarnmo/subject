@@ -18,11 +18,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package se.subject.repositories;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import se.subject.entities.Comment;
+import se.subject.entities.Page;
 
 @Repository
 public interface ICommentRepository extends CrudRepository<Comment, Integer> {
+	List<Comment> findAllByPageOrderByUpdatedDesc(Page page);
 }

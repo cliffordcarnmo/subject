@@ -18,19 +18,28 @@
 
 package se.subject.controllers;
 
+//import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import se.subject.services.logging.ILoggingService;
+
 @Controller
 public class AboutController {
-	
+	@Autowired
+	ILoggingService loggingService;
+		
 	@GetMapping("/about")
 	public ModelAndView userView(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("about");
+
+		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}

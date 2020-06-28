@@ -108,6 +108,10 @@ public class Page implements Serializable {
 		this.name = name;
 	}
 
+	public String getPermalink() {
+		return "https://www.subject.se/space/" + this.getSpace().getUrl() + "/" + this.getUrl();
+	}
+	
 	public String getUrl() {
 		return this.url;
 	}

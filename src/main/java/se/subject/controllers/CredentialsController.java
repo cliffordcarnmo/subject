@@ -115,7 +115,7 @@ public class CredentialsController {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/login");
 
-		String email = values.getFirst("email");
+		String email = values.getFirst("loginEmail");
 		String password = values.getFirst("password");
 
 		values.clear();

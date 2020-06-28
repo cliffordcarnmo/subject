@@ -5,7 +5,11 @@
 	<div class="form-group">
 		<label for="email">E-mail address</label>
 		<input type="email" class="form-control" id="email" name="email" placeholder="Your e-mail">
+		<div class="invalid-feedback">
+			That e-mail address is already registered.
+		</div>
 	</div>
+
 	<div class="form-group">
 		<label for="name">Name/Handle</label>
 		<input type="name" class="form-control" id="name" name="name" placeholder="Your name">
@@ -20,7 +24,7 @@
 		<input type="password" class="form-control" id="invitation" name="invitation" placeholder="Invitation code">
 		<small id="invitationHelp" class="form-text text-muted">You'll need an invitation code. Ask sysop@subject.se.</small>
 	</div>
-	<button type="submit" class="btn btn-primary">Register</button>
+	<button type="submit" id="userSubmit" class="btn btn-primary">Register</button>
 </form>
 
 <div th:replace="footer"></div>
