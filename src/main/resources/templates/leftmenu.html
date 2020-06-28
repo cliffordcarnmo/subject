@@ -1,4 +1,4 @@
-<div class="col-sm-2 p-4" >
+<div class="col-sm-2 p-4 border-right">
 
 <h4>Spaces</h4>
 <th:block th:if="${session.user}">
@@ -6,13 +6,11 @@
 	<th:block th:if="${space} and ${spaceView} and ${space.getOperator(session.user)}">
 		<p><a class="btn btn-primary "role="button" th:href="${'/space/edit/' + space.getUrl()}">Edit Space</a></p>
 	</th:block>
-
 	<th:block th:if="${page} and ${pageView}">
 		<th:block th:if="${page.getSpace().getOperator(session.user)}">
 			<p><a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getUrl()}">Edit Page</a></p>
 		</th:block>
 	</th:block>
-
 </th:block>
 
 <nav class="nav flex-column">
