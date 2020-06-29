@@ -18,8 +18,8 @@
 
 package se.subject.services.logging;
 
-import java.util.HashMap;
-
 public interface ILoggingService {
-	void Log(HashMap<String, Object> payload);
+	public void Init();
+	public void AddEvent(LoggingEvent loggingEvent);
+	void Log();
 }

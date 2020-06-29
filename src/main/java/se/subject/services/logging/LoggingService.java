@@ -18,31 +18,35 @@
 
 package se.subject.services.logging;
 
-import java.util.HashMap;
-
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoggingService implements ILoggingService {
+	@Value("${subject.logging.enabled}")
+	private Boolean loggingEnabled;
 
+	private List<LoggingEvent> loggingEvents = new ArrayList<LoggingEvent>();
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public void Log(HashMap<String, Object> payload) {
-		if (payload.containsKey("class")) {
-			logger.info("[Subject] Class: {}", payload.get("class"));
-		}
+	public void Init() {
+		this.loggingEvents.clear();
+	}
 
-		if (payload.containsKey("session")) {
-			HttpSession session = (HttpSession)payload.get("session");
-			logger.info("[Subject] User: {}", session.getAttribute("user"));
-		}
+	public void AddEvent(LoggingEvent loggingEvent) {
+		this.loggingEvents.add(loggingEvent);
+	}
 
-		if (payload.containsKey("model")) {
-			logger.info("[Subject] Model: {}", payload.get("model"));
+	public void Log() {
+		if (loggingEnabled) {
+			for (LoggingEvent loggingEvent : this.loggingEvents) {
+				logger.info("[Subject] {}: {}", loggingEvent.getTitle(), loggingEvent.getContent());
+			}
 		}
 	}
 }

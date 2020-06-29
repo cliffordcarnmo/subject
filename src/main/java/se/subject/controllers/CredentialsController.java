@@ -35,11 +35,16 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import se.subject.entities.User;
 import se.subject.repositories.IUserRepository;
+import se.subject.services.logging.ILoggingService;
+import se.subject.services.logging.LoggingEvent;
 import se.subject.services.messages.IMessageService;
 import se.subject.services.security.ICredentialService;
 
 @Controller
 public class CredentialsController {
+	@Autowired
+	ILoggingService loggingService;
+
 	@Autowired
 	private IMessageService messageService;
 
@@ -98,7 +103,10 @@ public class CredentialsController {
 				user.setHash(credentials.get("hash"));
 				
 				userRepository.save(user);
-
+				
+				user.setHash("");
+				user.setSalt("");
+				
 				session.setAttribute("user", user);
 				
 				modelAndView.setViewName("home");
@@ -112,6 +120,9 @@ public class CredentialsController {
 
 	@PostMapping("/login")
 	public RedirectView login(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes ) {
+		loggingService.Init();
+		loggingService.AddEvent(new LoggingEvent("class", this.getClass()));
+		
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/login");
 
@@ -122,6 +133,8 @@ public class CredentialsController {
 
 		if (email.isEmpty() || password.isEmpty()) {
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsMissing"));
+
+			loggingService.AddEvent(new LoggingEvent("Login failed", messageService.getMessage("credentialsMissing").getMessage()));
 		} else {
 			Optional<User> user = credentialService.verifyCredentials(email, password);
 			password = "";
@@ -132,11 +145,18 @@ public class CredentialsController {
 				session.setAttribute("user", user.get());
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsVerified"));
+
+				loggingService.AddEvent(new LoggingEvent("Login success", email));
+				loggingService.AddEvent(new LoggingEvent("Login success", messageService.getMessage("credentialsVerified").getMessage()));
 			} else {
+				loggingService.AddEvent(new LoggingEvent("Login failed", email));
+				loggingService.AddEvent(new LoggingEvent("Login failed", messageService.getMessage("credentialsNotFoundError").getMessage()));
+				
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsNotFoundError"));
 			}
 		}
-		
+
+		loggingService.Log();
 		return redirectView;
 	}
 }
