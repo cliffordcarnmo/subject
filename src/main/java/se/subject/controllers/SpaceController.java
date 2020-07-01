@@ -40,6 +40,7 @@ import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
 import se.subject.repositories.IUserRepository;
 import se.subject.services.logging.ILoggingService;
+import se.subject.services.logging.LoggingEvent;
 import se.subject.services.messages.IMessageService;
 
 @Controller
@@ -162,8 +163,11 @@ public class SpaceController {
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdateMissingError"));
 			} else {
-				spaceRepository.save(space);
+				List<User> users = spaceRepository.findById(space.getSpaceid()).get().getUsers();
 
+				space.setUsers(users);
+				spaceRepository.save(space);
+				
 				redirectView.setUrl("/space/edit/" + space.getUrl());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdated"));
 			}

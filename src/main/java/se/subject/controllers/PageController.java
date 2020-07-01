@@ -151,14 +151,14 @@ public class PageController {
 		if (session.getAttribute("user") == null) {
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (values.getFirst("name").isBlank() || values.getFirst("editPageUrl").isBlank()) {
+			if (values.getFirst("name").isBlank() || values.getFirst("url").isBlank()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
 			} else {
-				Page page = pageRepository.findByUrl(values.getFirst("editPageUrl")).get();
+				Page page = pageRepository.findById(Integer.parseInt(values.getFirst("pageid"))).get();
 
 				page.setContent(values.getFirst("content"));
 				page.setName(values.getFirst("name"));
-				page.setUrl(values.getFirst("editPageUrl"));
+				page.setUrl(values.getFirst("url"));
 
 				pageRepository.save(page);
 
@@ -185,19 +185,19 @@ public class PageController {
 
 			return redirectView;
 		} else {
-			if (values.getFirst("name").isBlank() || values.getFirst("createPageUrl").isBlank()) {
+			if (values.getFirst("name").isBlank() || values.getFirst("url").isBlank()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationMissingError"));
 
 				return redirectView;
 			} else {
-				if (pageRepository.findByUrl(values.getFirst("createPageUrl")).isPresent()) {
+				if (pageRepository.findByUrl(values.getFirst("url")).isPresent()) {
 					redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationUrlExistsError"));
 				} else {
 					User user = (User) session.getAttribute("user");
 					Page page = new Page();
 	
 					page.setName(values.getFirst("name"));
-					page.setUrl(values.getFirst("createPageUrl"));
+					page.setUrl(values.getFirst("url"));
 					page.setContent(values.getFirst("content"));
 					page.setUser(user);
 					page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());

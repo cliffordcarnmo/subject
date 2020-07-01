@@ -5,7 +5,7 @@
 	<form action="#" th:action="@{/space/create}" th:object="${newSpace}" method="post">
 		<div class="form-group">
 			<label for="name">Space name</label>
-			<input type="text" class="form-control" id="name" name="name" placeholder="Space name">
+			<input type="text" class="form-control" th:field="${newSpace.name}" id="name" name="name" placeholder="Space name">
 		</div>
 		<div class="form-group">
 			<label for="createSpaceUrl">Permalink</label>
@@ -13,7 +13,7 @@
 				<div class="input-group-prepend">
 					<span class="input-group-text">https://www.subject.se/space/</span>
 				</div>
-				<input type="text" class="form-control" id="createSpaceUrl" placeholder="give-your-space-a-descriptive-permalink">
+				<input type="text" class="form-control" th:field="${newSpace.url}" name="url" id="createSpaceUrl" placeholder="give-your-space-a-descriptive-permalink">
 				<div class="invalid-feedback">
 					That permalink address is already registered.
 				</div>
@@ -21,7 +21,7 @@
 		</div>
 		<div class="form-group">
 			<label for="description">Description</label>
-			<input type="text" class="form-control" id="description" name="description" placeholder="Space description">
+			<input type="text" class="form-control" th:field="${newSpace.url}" id="description" name="description" placeholder="Space description">
 		</div>
 		<button type="submit" id="createSpaceSubmit" class="btn btn-primary">Create Space</button>
 	</form>

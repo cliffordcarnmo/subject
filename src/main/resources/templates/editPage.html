@@ -13,7 +13,7 @@
 				<div class="input-group-prepend">
 					<span class="input-group-text" th:text="'https://www.subject.se/space/' + ${page.getSpace().getUrl()} + '/page/'"></span>
 				</div>
-				<input type="text" class="form-control" th:field="${page.url}" id="editPageUrl" th:value="${page.url}" name="editPageUrl">
+				<input type="text" class="form-control" th:field="${page.url}" id="editPageUrl" th:value="${page.url}" name="url">
 				<div class="invalid-feedback">
 					That permalink address is already registered.
 				</div>
