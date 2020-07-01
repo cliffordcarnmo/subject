@@ -21,15 +21,12 @@ package se.subject.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
-
-//import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -147,30 +144,30 @@ public class PageController {
 	}
 
 	@PostMapping("/page/edit")
-	public RedirectView updatePage(@ModelAttribute("page") Page page, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView updatePage(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/");
 
 		if (session.getAttribute("user") == null) {
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (page.getName().isEmpty() || page.getUrl().isEmpty()) {
+			if (values.getFirst("name").isBlank() || values.getFirst("editPageUrl").isBlank()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdateMissingError"));
 			} else {
-				Page oldPage = pageRepository.findByUrl(page.getUrl()).get();
+				Page page = pageRepository.findByUrl(values.getFirst("editPageUrl")).get();
 
-				oldPage.setContent(page.getContent());
-				oldPage.setName(page.getName());
-				oldPage.setUrl(page.getUrl());
+				page.setContent(values.getFirst("content"));
+				page.setName(values.getFirst("name"));
+				page.setUrl(values.getFirst("editPageUrl"));
 
-				pageRepository.save(oldPage);
+				pageRepository.save(page);
 
-				Space space = oldPage.getSpace();
-				space.setUpdated(oldPage.getUpdated());
+				Space space = page.getSpace();
+				space.setUpdated(page.getUpdated());
 
 				spaceRepository.save(space);
 				
-				redirectView.setUrl("/space/" + oldPage.getSpace().getUrl() + "/" + oldPage.getUrl());
+				redirectView.setUrl("/space/" + space.getUrl() + "/" + page.getUrl());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageUpdated"));
 			}
 		}
@@ -188,19 +185,19 @@ public class PageController {
 
 			return redirectView;
 		} else {
-			if (values.getFirst("name").isEmpty() || values.getFirst("url").isEmpty()) {
+			if (values.getFirst("name").isBlank() || values.getFirst("createPageUrl").isBlank()) {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationMissingError"));
 
 				return redirectView;
 			} else {
-				if (pageRepository.findByUrl(values.getFirst("pageUrl")).isPresent()) {
+				if (pageRepository.findByUrl(values.getFirst("createPageUrl")).isPresent()) {
 					redirectAttributes.addFlashAttribute("message", messageService.getMessage("pageCreationUrlExistsError"));
 				} else {
 					User user = (User) session.getAttribute("user");
 					Page page = new Page();
 	
 					page.setName(values.getFirst("name"));
-					page.setUrl(values.getFirst("pageUrl"));
+					page.setUrl(values.getFirst("createPageUrl"));
 					page.setContent(values.getFirst("content"));
 					page.setUser(user);
 					page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());

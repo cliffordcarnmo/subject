@@ -1,7 +1,6 @@
 package se.subject.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,30 +22,45 @@ public class ValidatorController {
 	@Autowired
 	private IUserRepository userRepository;
 
-	@PostMapping(path = "/validator/spaceUrl")
-	public ResponseEntity<Boolean> validateSpaceUrl(@RequestBody MultiValueMap<String, String> values){
-		if (spaceRepository.findByUrl(values.getFirst("url")).isPresent()) {
-			return ResponseEntity.ok(true);
-		} else {
-			return ResponseEntity.ok(false);
-		}
-	}
+	@PostMapping(path = "/validator/url")
+	public ResponseEntity<Boolean> validateUrl(@RequestBody MultiValueMap<String, String> values){
+		String mode = values.getFirst("mode");
+		String type = values.getFirst("type");
+		String url = values.getFirst("url").toLowerCase();
+		String initialUrl = values.getFirst("initialUrl").toLowerCase();
 
-	@PostMapping("/validator/pageUrl")
-	public ResponseEntity<Boolean> validatePageUrl(@RequestBody MultiValueMap<String, String> values) {
-		if (pageRepository.findByUrl(values.getFirst("url")).isPresent()) {
-			return ResponseEntity.ok(true);
+		ResponseEntity<Boolean> response = ResponseEntity.ok(false);
+
+		if (url.isBlank()) {
+			response = ResponseEntity.ok(true);
 		} else {
-			return ResponseEntity.ok(false);
+			if (type.equals("space")) {
+				response = ResponseEntity.ok(spaceRepository.findByUrl(url).isPresent());
+			} else if (type.equals("page")) {
+				response = ResponseEntity.ok(pageRepository.findByUrl(url).isPresent());
+			}
+	
+			if (mode.equals("edit") && url.equals(initialUrl)) {
+				response = ResponseEntity.ok(false);
+			}
 		}
+
+		return response;
 	}
 
 	@PostMapping("/validator/userEmail")
 	public ResponseEntity<Boolean> validateUserEmail(@RequestBody MultiValueMap<String, String> values) {
-		if (userRepository.findByEmail(values.getFirst("email")).isPresent()) {
-			return ResponseEntity.ok(true);
+		String email = values.getFirst("email").toLowerCase();
+
+		ResponseEntity<Boolean> response;
+		response = ResponseEntity.ok(false);
+
+		if (email.isBlank()) {
+			response = ResponseEntity.ok(true);
 		} else {
-			return ResponseEntity.ok(false);
+			response = ResponseEntity.ok(userRepository.findByEmail(email).isPresent());
 		}
+		
+		return response;
 	}
 }

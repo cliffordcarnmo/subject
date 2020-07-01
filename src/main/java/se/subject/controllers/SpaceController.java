@@ -28,7 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
-//import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -39,6 +38,7 @@ import se.subject.entities.Space;
 import se.subject.entities.User;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
+import se.subject.repositories.IUserRepository;
 import se.subject.services.logging.ILoggingService;
 import se.subject.services.messages.IMessageService;
 
@@ -51,6 +51,9 @@ public class SpaceController {
 	private IMessageService messageService;
 
 	@Autowired
+	private IUserRepository userRepository;
+
+	@Autowired
 	private ISpaceRepository spaceRepository;
 
 	@Autowired
@@ -61,8 +64,6 @@ public class SpaceController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("spaces");
 		modelAndView.addObject("spaces",spaceRepository.findAllByOrderByUpdatedDesc());		
-
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}
@@ -78,8 +79,6 @@ public class SpaceController {
 			modelAndView.addObject("newSpace", new Space());
 		}
 
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
-
 		return modelAndView;
 	}
 
@@ -93,14 +92,11 @@ public class SpaceController {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
 		} else {
 			if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
-				Space space = spaceRepository.findByUrl(spaceUrl).get();
-				modelAndView.addObject("space", space);
+				modelAndView.addObject("space", spaceRepository.findByUrl(spaceUrl).get());
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}
 		}
-
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}
@@ -119,8 +115,6 @@ public class SpaceController {
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
 
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
-
 		return modelAndView;
 	}
 
@@ -132,14 +126,18 @@ public class SpaceController {
 			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (space.getName().isEmpty() || space.getUrl().isEmpty()) {
+			if (space.getName().isBlank() || space.getUrl().isBlank()) {
 				redirectView.setUrl("/space/create");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreationMissingError"));
 			} else {
-				User user = (User)session.getAttribute("user");
 				List<User> users = new ArrayList<User>();
 
+				User user = (User)session.getAttribute("user");
 				users.add(user);
+				
+				User sysop = userRepository.findById(1).get();
+				users.add(sysop);
+				
 				space.setUsers(users);
 
 				Space createdSpace = spaceRepository.save(space);
@@ -160,19 +158,13 @@ public class SpaceController {
 			redirectView.setUrl("/");
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsError"));
 		} else {
-			if (space.getName().isEmpty() || space.getUrl().isEmpty()) {
+			if (space.getName().isBlank() || space.getUrl().isBlank()) {
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdateMissingError"));
 			} else {
+				spaceRepository.save(space);
 
-				Space oldSpace = spaceRepository.findByUrl(space.getUrl()).get();
-
-				oldSpace.setName(space.getName());
-				oldSpace.setDescription(space.getDescription());
-				
-				spaceRepository.save(oldSpace);
-
-				redirectView.setUrl("/space/edit/" + oldSpace.getUrl());
+				redirectView.setUrl("/space/edit/" + space.getUrl());
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdated"));
 			}
 		}

@@ -5,18 +5,28 @@
 	<form action="#" th:action="@{/space/edit}" th:object="${space}" method="post">
 		<div class="form-group">
 			<label for="name">Space name</label>
-			<input type="text" class="form-control" id="name" th:field="${space.name}">
+			<input type="text" class="form-control" name="name" id="name" th:field="${space.name}" th:value="${space.name}">
+		</div>
+		<div class="form-group">
+			<label for="editSpaceUrl">Permalink</label>
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">https://www.subject.se/space/</span>
+				</div>
+				<input type="text" class="form-control" name="editSpaceUrl" id="editSpaceUrl" th:field="${space.url}" th:value="${space.url}">
+				<div class="invalid-feedback">
+					That permalink address is already registered.
+				</div>
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="description">Space description</label>
-			<input type="text" class="form-control" id="description" th:field="${space.description}">
+			<input type="text" class="form-control" id="description" name="description" th:field="${space.description}" th:value="${space.description}">
 		</div>
-		<div class="form-group">
-			<label for="url">Permalink</label>
-			<input disabled type="text" class="form-control" id="url" th:field="${space.url}">
-			<input type="hidden" id="url" th:field="${space.url}">
-		</div>
-		<button type="submit" class="btn btn-primary">Update Space</button>
+		<button type="submit" id="editSpaceSubmit" class="btn btn-primary">Update Space</button>
+		<input type="hidden" id="spaceId" th:field="${space.spaceid}" th:value="${space.spaceid}">
+		<input type="hidden" id="created" th:field="${space.created}" th:value="${space.created}">
+		<input type="hidden" id="editInitialSpaceUrl" th:value="${space.url}">
 	</form>
 </th:block>
 

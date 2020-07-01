@@ -8,23 +8,28 @@
 			<input type="text" class="form-control" id="name" name="name" placeholder="Page name">
 		</div>
 		<div class="form-group">
-			<label for="url">Permalink</label>
-			<input type="text" class="form-control" id="pageUrl" placeholder="give-your-page-a-descriptive-permalink">
-		<div class="invalid-feedback">
-			That permalink address is already registered.
-		</div>
+			<label for="createPageUrl">Permalink</label>
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text" th:text="'https://www.subject.se/space/' + ${space.getUrl()} + '/page/'"></span>
+				</div>
+				<input type="text" class="form-control" name="createPageUrl" id="createPageUrl" placeholder="give-your-page-a-descriptive-permalink">
+				<div class="invalid-feedback">
+					That permalink address is already registered.
+				</div>
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="content">Content</label>
 			<textarea rows="20" class="form-control" id="content" name="content" placeholder="Page content"></textarea>
 		</div>
-		<button type="submit" id="pageUrlSubmit" class="btn btn-primary">Create Page</button>
+		<button type="submit" id="createPageSubmit" class="btn btn-primary">Create Page</button>
 		<input type="hidden" id="spaceid" name="spaceid" th:value="${space.getSpaceid()}">
 	</form>
 </th:block>
 
 <script>
-	var simplemde = new SimpleMDE({	spellChecker: false, autofocus: true, showIcons: ["code", "table"], element: document.getElementById("content")});
+	var simplemde = new SimpleMDE({	spellchecker: false, autofocus: true, showIcons: ["code", "table"], element: document.getElementById("content")});
 </script>
 
 <div th:replace="footer"></div>

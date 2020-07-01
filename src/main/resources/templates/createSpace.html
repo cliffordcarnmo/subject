@@ -8,19 +8,22 @@
 			<input type="text" class="form-control" id="name" name="name" placeholder="Space name">
 		</div>
 		<div class="form-group">
-			<label for="url">Permalink</label>
+			<label for="createSpaceUrl">Permalink</label>
 			<div class="input-group">
 				<div class="input-group-prepend">
 					<span class="input-group-text">https://www.subject.se/space/</span>
 				</div>
-				<input type="text" class="form-control" id="spaceUrl" placeholder="give-your-space-a-descriptive-permalink">
+				<input type="text" class="form-control" id="createSpaceUrl" placeholder="give-your-space-a-descriptive-permalink">
+				<div class="invalid-feedback">
+					That permalink address is already registered.
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description">Description</label>
 			<input type="text" class="form-control" id="description" name="description" placeholder="Space description">
 		</div>
-		<button type="submit" id="spaceUrlSubmit" class="btn btn-primary">Create Space</button>
+		<button type="submit" id="createSpaceSubmit" class="btn btn-primary">Create Space</button>
 	</form>
 </th:block>
 

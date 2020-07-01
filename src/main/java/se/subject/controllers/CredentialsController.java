@@ -132,9 +132,9 @@ public class CredentialsController {
 		values.clear();
 
 		if (email.isEmpty() || password.isEmpty()) {
-			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsMissing"));
-
 			loggingService.AddEvent(new LoggingEvent("Login failed", messageService.getMessage("credentialsMissing").getMessage()));
+
+			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsMissing"));
 		} else {
 			Optional<User> user = credentialService.verifyCredentials(email, password);
 			password = "";
@@ -147,10 +147,8 @@ public class CredentialsController {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsVerified"));
 
 				loggingService.AddEvent(new LoggingEvent("Login success", email));
-				loggingService.AddEvent(new LoggingEvent("Login success", messageService.getMessage("credentialsVerified").getMessage()));
 			} else {
 				loggingService.AddEvent(new LoggingEvent("Login failed", email));
-				loggingService.AddEvent(new LoggingEvent("Login failed", messageService.getMessage("credentialsNotFoundError").getMessage()));
 				
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsNotFoundError"));
 			}

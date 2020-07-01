@@ -1,6 +1,6 @@
 <div class="col-sm-2 p-4 border-left">
 
-<th:block th:if="${space} and ${spaceView} or ${spaceEdit}">
+<th:block th:if="${space} and (${spaceView} or ${spaceEdit})">
 	<h4>Operators</h4>
 	<nav class="nav flex-column">
 		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getEmail()}"></a>
@@ -19,7 +19,7 @@
 	</nav>
 </th:block>
 
-<th:block th:if="${page} and ${pageView}">
+<th:block th:if="${page} and (${pageView} or ${pageEdit})">
 	<h4>Author</h4>
 	<nav class="nav flex-column">
 		<p><a class="nav-link" th:href="@{'/user/' + ${page.getUser().getEmail()}}" th:text="${page.getUser().getName()}"></a></p>
@@ -48,7 +48,7 @@
 	</nav>
 	<h4>Content length</h4>
 	<nav class="nav flex-column">
-		<p class="nav-link" th:text="${content.length() + ' bytes'}"></p>
+		<p class="nav-link" th:text="${page.getContent().length() + ' bytes'}"></p>
 	</nav>
 </th:block>
 
