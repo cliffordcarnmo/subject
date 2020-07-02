@@ -39,14 +39,18 @@ public class MessageService implements IMessageService {
 			put("registrationMissingError", new Message(MessageType.danger, "Credentials missing."));
 			put("registrationUserExistsError", new Message(MessageType.danger, "The user already exists."));
 			put("registrationMissingInvitationError", new Message(MessageType.danger, "Invalid invitation code."));
+			put("registrationDisabledError", new Message(MessageType.danger, "Subject is currently not open for new users."));
 			put("spaceCreationMissingError", new Message(MessageType.danger, "Missing space name."));
 			put("pageCreationMissingError", new Message(MessageType.danger, "Missing page name."));
 			put("pageCreationUrlExistsError", new Message(MessageType.danger, "That URL already exists."));
 			put("pageUpdateMissingError", new Message(MessageType.danger, "Missing page name."));
 			put("userMissingError", new Message(MessageType.danger, "The user does not exist."));
+			put("userRemoveError", new Message(MessageType.danger, "You are not logged in, cannot delete your user."));
+			put("credentialsOperatorError", new Message(MessageType.danger, "You are not authorized to perform the request action."));
 			
 			put("logoutCompleted", new Message(MessageType.success, "You were successfully logged out."));
 			put("userUpdated", new Message(MessageType.success, "The user was successfully updated."));
+			put("userRemoved", new Message(MessageType.success, "The user and all related content was successfully deleted."));
 			put("pageUpdated", new Message(MessageType.success, "The page was updated."));
 			put("credentialsVerified", new Message(MessageType.success, "Credentials verified. Welcome to Subject."));
 			put("registrationCompleted", new Message(MessageType.success, "Registration complete. Welcome to Subject."));

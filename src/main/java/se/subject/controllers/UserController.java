@@ -33,8 +33,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import se.subject.entities.Comment;
+import se.subject.entities.Page;
+import se.subject.entities.Space;
 import se.subject.entities.User;
+import se.subject.repositories.ICommentRepository;
 import se.subject.repositories.IPageRepository;
+import se.subject.repositories.ISpaceRepository;
 import se.subject.repositories.IUserRepository;
 import se.subject.services.messages.IMessageService;
 import se.subject.services.security.ICredentialService;
@@ -51,7 +56,13 @@ public class UserController {
 	private IUserRepository userRepository;
 
 	@Autowired
+	private ISpaceRepository spaceRepository;
+
+	@Autowired
 	private IPageRepository pageRepository;
+
+	@Autowired
+	private ICommentRepository commentRepository;
 
 	@GetMapping("/edituser")
 	public ModelAndView userView(HttpSession session) {
@@ -112,6 +123,10 @@ public class UserController {
 				}
 
 				userRepository.save(user);
+				
+				user.setHash("");
+				user.setSalt("");
+				
 				session.setAttribute("user", user);
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("userUpdated"));
 			}
@@ -121,12 +136,33 @@ public class UserController {
 	}
 
 	@PostMapping("/user/remove")
-	public RedirectView userRemove(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
+	public RedirectView userRemove(HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl("/");
 
 		if (session.getAttribute("user") == null) {
-			redirectView.setUrl("/");
-			redirectAttributes.addFlashAttribute("message", messageService.getMessage("userUpdateError"));
+			redirectAttributes.addFlashAttribute("message", messageService.getMessage("userRemoveError"));
+		} else {
+			User user = (User)session.getAttribute("user");
+			
+			for (Page page : pageRepository.findAllByUser(user)) {
+				for (Comment comment : page.getComments()) {
+					commentRepository.delete(comment);
+				}
+
+				pageRepository.delete(page);
+			}
+			
+			for (Space space : user.getSpaces()) {
+				spaceRepository.delete(space);
+			}
+			
+			userRepository.delete(user);
+
+			session.removeAttribute("user");
+			session.invalidate();
+
+			redirectAttributes.addFlashAttribute("message", messageService.getMessage("userRemoved"));
 		}
 
 		return redirectView;

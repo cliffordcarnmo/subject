@@ -39,15 +39,10 @@ import se.subject.entities.User;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
 import se.subject.repositories.IUserRepository;
-import se.subject.services.logging.ILoggingService;
-import se.subject.services.logging.LoggingEvent;
 import se.subject.services.messages.IMessageService;
 
 @Controller
 public class SpaceController {
-	@Autowired
-	ILoggingService loggingService;
-
 	@Autowired
 	private IMessageService messageService;
 
@@ -64,7 +59,7 @@ public class SpaceController {
 	public ModelAndView allSpaces(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("spaces");
-		modelAndView.addObject("spaces",spaceRepository.findAllByOrderByUpdatedDesc());		
+		modelAndView.addObject("spaces", spaceRepository.findAllByOrderByUpdatedDesc());		
 
 		return modelAndView;
 	}
@@ -76,7 +71,7 @@ public class SpaceController {
 
 		if (session.getAttribute("user") == null) {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
-		}else{
+		} else {
 			modelAndView.addObject("newSpace", new Space());
 		}
 
@@ -93,7 +88,11 @@ public class SpaceController {
 			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
 		} else {
 			if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
-				modelAndView.addObject("space", spaceRepository.findByUrl(spaceUrl).get());
+				if (!spaceRepository.findByUrl(spaceUrl).get().getOperator((User)session.getAttribute("user"))) {
+					modelAndView.addObject("message", messageService.getMessage("credentialsOperatorError"));
+				} else {
+					modelAndView.addObject("space", spaceRepository.findByUrl(spaceUrl).get());
+				}
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}

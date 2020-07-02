@@ -42,14 +42,10 @@ import se.subject.entities.User;
 import se.subject.repositories.ICommentRepository;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
-import se.subject.services.logging.ILoggingService;
 import se.subject.services.messages.IMessageService;
 
 @Controller
 public class PageController {
-	@Autowired
-	ILoggingService loggingService;
-
 	@Autowired
 	private IMessageService messageService;
 
@@ -78,7 +74,7 @@ public class PageController {
 				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("page", page);
 
-				if( !page.getComments().isEmpty()) {
+				if (!page.getComments().isEmpty()) {
 					modelAndView.addObject("comments", commentRepository.findAllByPageOrderByUpdatedDesc(page));
 				}
 
@@ -92,8 +88,6 @@ public class PageController {
 		} else {
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
-
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}
@@ -116,8 +110,6 @@ public class PageController {
 			}
 		}
 
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
-
 		return modelAndView;
 	}
 
@@ -137,8 +129,6 @@ public class PageController {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}
 		}
-
-		//loggingService.Log(new HashMap<String, Object>() {{ put("class", this.getClass()); put("session", session); put("model", modelAndView);};});
 
 		return modelAndView;
 	}
@@ -201,7 +191,7 @@ public class PageController {
 					page.setContent(values.getFirst("content"));
 					page.setUser(user);
 					page.setSpace(spaceRepository.findById((Integer.parseInt(values.getFirst("spaceid")))).get());
-	
+
 					Page createdPage = pageRepository.save(page);
 	
 					Space space = createdPage.getSpace();
@@ -215,6 +205,7 @@ public class PageController {
 				}
 			}
 		}
+
 		return redirectView;
 	}
 }

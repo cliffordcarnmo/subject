@@ -53,7 +53,6 @@ public class ValidatorController {
 		String email = values.getFirst("email").toLowerCase();
 
 		ResponseEntity<Boolean> response;
-		response = ResponseEntity.ok(false);
 
 		if (email.isBlank()) {
 			response = ResponseEntity.ok(true);

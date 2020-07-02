@@ -24,6 +24,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,16 +36,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import se.subject.entities.User;
 import se.subject.repositories.IUserRepository;
-import se.subject.services.logging.ILoggingService;
-import se.subject.services.logging.LoggingEvent;
 import se.subject.services.messages.IMessageService;
 import se.subject.services.security.ICredentialService;
 
 @Controller
 public class CredentialsController {
-	@Autowired
-	ILoggingService loggingService;
-
 	@Autowired
 	private IMessageService messageService;
 
@@ -54,9 +50,24 @@ public class CredentialsController {
 	@Autowired
 	IUserRepository userRepository;
 
+	@Value("${subject.registration.enabled}")
+	Boolean registrationEnabled;
+
+	@Value("${subject.invitation.code}")
+	String invitationCode;
+
 	@GetMapping("/register")
-	public String registerView() {
-		return "register";
+	public ModelAndView registerView() {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if (!registrationEnabled) {
+			modelAndView.setViewName("home");
+			modelAndView.addObject("message", messageService.getMessage("registrationDisabledError"));
+		} else {
+			modelAndView.setViewName("register");
+		}
+
+		return modelAndView;
 	}
 
 	@GetMapping("/login")
@@ -90,7 +101,7 @@ public class CredentialsController {
 			modelAndView.setViewName("register");
 			modelAndView.addObject("message", messageService.getMessage("registrationMissingError"));
 		} else {
-			if(invitation.equals("nordkap")){
+			if(invitation.equals(invitationCode)){
 				if (userRepository.findByEmail(email).isPresent()){
 					modelAndView.addObject("message", messageService.getMessage("registrationUserExistsError"));
 				} else {
@@ -124,9 +135,6 @@ public class CredentialsController {
 
 	@PostMapping("/login")
 	public RedirectView login(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes ) {
-		loggingService.Init();
-		loggingService.AddEvent(new LoggingEvent("class", this.getClass()));
-
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/login");
 
@@ -136,7 +144,6 @@ public class CredentialsController {
 		values.clear();
 
 		if (email.isBlank() || password.isBlank()) {
-			loggingService.AddEvent(new LoggingEvent("Login failed", messageService.getMessage("credentialsMissing").getMessage()));
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsMissing"));
 		} else {
 			Optional<User> user = credentialService.verifyCredentials(email, password);
@@ -148,14 +155,11 @@ public class CredentialsController {
 				session.setAttribute("user", user.get());
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsVerified"));
-				loggingService.AddEvent(new LoggingEvent("Login success", email));
 			} else {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsNotFoundError"));
-				loggingService.AddEvent(new LoggingEvent("Login failed", email));
 			}
 		}
 
-		loggingService.Log();
 		return redirectView;
 	}
 }
