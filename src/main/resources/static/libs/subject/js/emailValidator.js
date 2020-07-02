@@ -3,7 +3,7 @@ $("#email").keyup(function() {
 });
 
 function validateEmail(email, button) {
-	$.post("/validator/userEmail", {email: email.val()}).done(function(result) {
+	$.post("/validator/email", {email: email.val()}).done(function(result) {
 		if(result == false) {
 			email.addClass("is-valid");
 			email.removeClass("is-invalid");

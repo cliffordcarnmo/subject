@@ -48,7 +48,7 @@ public class ValidatorController {
 		return response;
 	}
 
-	@PostMapping("/validator/userEmail")
+	@PostMapping("/validator/email")
 	public ResponseEntity<Boolean> validateUserEmail(@RequestBody MultiValueMap<String, String> values) {
 		String email = values.getFirst("email").toLowerCase();
 

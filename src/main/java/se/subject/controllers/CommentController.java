@@ -60,7 +60,7 @@ public class CommentController {
 			return redirectView;
 		}
 
-		if (values.getFirst("content").isEmpty() || values.getFirst("pageurl").isEmpty()) {
+		if (values.getFirst("content").isBlank() || values.getFirst("pageurl").isBlank()) {
 			redirectView.addStaticAttribute("message", messageService.getMessage("createCommentMissingError"));
 
 			return redirectView;
@@ -77,7 +77,7 @@ public class CommentController {
 		comment.setPage(page);
 		comment.setContent(content);
 
-		if (values.containsKey("parentid") && (!values.getFirst("parentid").isEmpty() || !values.getFirst("parentid").isBlank())) {
+		if (values.containsKey("parentid") && (!values.getFirst("parentid").isBlank() || !values.getFirst("parentid").isBlank())) {
 			comment.setParentid(Integer.parseInt(values.getFirst("parentid")));
 		}
 

@@ -91,27 +91,31 @@ public class CredentialsController {
 			modelAndView.addObject("message", messageService.getMessage("registrationMissingError"));
 		} else {
 			if(invitation.equals("nordkap")){
-				User user = new User();
-
-				user.setEmail(email);
-				user.setName(name);
-
-				HashMap<String, String> credentials = credentialService.generateCredentials(password);
-				password = "";
-
-				user.setSalt(credentials.get("salt"));
-				user.setHash(credentials.get("hash"));
-				
-				userRepository.save(user);
-				
-				user.setHash("");
-				user.setSalt("");
-				
-				session.setAttribute("user", user);
-				
-				modelAndView.setViewName("home");
-				modelAndView.addObject("message", messageService.getMessage("registrationCompleted"));
-			}else{
+				if (userRepository.findByEmail(email).isPresent()){
+					modelAndView.addObject("message", messageService.getMessage("registrationUserExistsError"));
+				} else {
+					User user = new User();
+	
+					user.setEmail(email);
+					user.setName(name);
+	
+					HashMap<String, String> credentials = credentialService.generateCredentials(password);
+					password = "";
+	
+					user.setSalt(credentials.get("salt"));
+					user.setHash(credentials.get("hash"));
+					
+					userRepository.save(user);
+					
+					user.setHash("");
+					user.setSalt("");
+					
+					session.setAttribute("user", user);
+					
+					modelAndView.setViewName("home");
+					modelAndView.addObject("message", messageService.getMessage("registrationCompleted"));
+				}
+			} else {
 				modelAndView.addObject("message", messageService.getMessage("registrationMissingInvitationError"));
 			}
 		}
@@ -122,7 +126,7 @@ public class CredentialsController {
 	public RedirectView login(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes ) {
 		loggingService.Init();
 		loggingService.AddEvent(new LoggingEvent("class", this.getClass()));
-		
+
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/login");
 
@@ -131,9 +135,8 @@ public class CredentialsController {
 
 		values.clear();
 
-		if (email.isEmpty() || password.isEmpty()) {
+		if (email.isBlank() || password.isBlank()) {
 			loggingService.AddEvent(new LoggingEvent("Login failed", messageService.getMessage("credentialsMissing").getMessage()));
-
 			redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsMissing"));
 		} else {
 			Optional<User> user = credentialService.verifyCredentials(email, password);
@@ -145,12 +148,10 @@ public class CredentialsController {
 				session.setAttribute("user", user.get());
 				redirectView.setUrl("/");
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsVerified"));
-
 				loggingService.AddEvent(new LoggingEvent("Login success", email));
 			} else {
-				loggingService.AddEvent(new LoggingEvent("Login failed", email));
-				
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("credentialsNotFoundError"));
+				loggingService.AddEvent(new LoggingEvent("Login failed", email));
 			}
 		}
 
