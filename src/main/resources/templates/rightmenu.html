@@ -3,7 +3,7 @@
 <th:block th:if="${space} and (${spaceView} or ${spaceEdit})">
 	<h4>Operators</h4>
 	<nav class="nav flex-column">
-		<a class="nav-link" th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getEmail()}"></a>
+		<p class="nav-link"><a th:each="user : ${space.getUsers()}" th:text="${user.getName() + ' '}" th:href="${'/user/' + user.getEmail()}"></a></p>
 	</nav>
 	<h4>Permalink</h4>
 	<nav class="nav flex-column">

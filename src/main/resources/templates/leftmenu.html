@@ -8,6 +8,7 @@
 	</th:block>
 	<th:block th:if="${page} and ${pageView}">
 		<th:block th:if="${page.getSpace().getOperator(session.user)}">
+			<p><a class="btn btn-primary "role="button" th:href="${'/space/' + space.getUrl() + '/' + page.getUrl() + '/create/'}">Create child Page</a></p>
 			<p><a class="btn btn-primary" role="button" th:href="${'/page/edit/' + page.getUrl()}">Edit Page</a></p>
 		</th:block>
 	</th:block>

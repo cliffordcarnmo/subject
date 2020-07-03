@@ -133,6 +133,28 @@ public class PageController {
 		return modelAndView;
 	}
 
+	@GetMapping("/space/{spaceUrl}/{pageUrl}/create")
+	public ModelAndView createChildPage(@PathVariable("spaceUrl") String spaceUrl, @PathVariable("pageUrl") String pageUrl, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("createPage");
+
+		if (session.getAttribute("user") == null) {
+			modelAndView.addObject("message", messageService.getMessage("credentialsError"));
+		} else {
+			if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
+				Space space = spaceRepository.findByUrl(spaceUrl).get();
+				modelAndView.addObject("space", space);
+				
+				Page parentPage = pageRepository.findByUrl(pageUrl).get();
+				modelAndView.addObject("parentPage", parentPage);
+			} else {
+				modelAndView.addObject("message", messageService.getMessage("spaceError"));
+			}
+		}
+
+		return modelAndView;
+	}
+
 	@PostMapping("/page/edit")
 	public RedirectView updatePage(@RequestBody MultiValueMap<String, String> values, HttpSession session, RedirectAttributes redirectAttributes) {
 		RedirectView redirectView = new RedirectView();
@@ -186,6 +208,10 @@ public class PageController {
 					User user = (User) session.getAttribute("user");
 					Page page = new Page();
 	
+					if (values.containsKey("parentid")) {
+						page.setParentid(Integer.parseInt(values.getFirst("parentid")));
+					}
+					
 					page.setName(values.getFirst("name"));
 					page.setUrl(values.getFirst("url"));
 					page.setContent(values.getFirst("content"));

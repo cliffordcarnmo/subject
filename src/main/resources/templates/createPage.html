@@ -2,6 +2,9 @@
 
 <th:block th:if="${session.user} and ${space}">
 	<h1 th:text="${'Create a new Page in ' + space.getName()}"></h1>
+		<th:block th:if="${parentPage}">
+			<h3 th:text="${'This will be a new child Page of ' + parentPage.getName()}"></h3>
+		</th:block>
 	<form action="#" th:action="@{/page/create}" method="post">
 		<div class="form-group">
 			<label for="name">Page name</label>
@@ -24,6 +27,9 @@
 			<textarea rows="20" class="form-control" id="content" name="content" placeholder="Page content"></textarea>
 		</div>
 		<button type="submit" id="createPageSubmit" class="btn btn-primary">Create Page</button>
+		<th:block th:if="${parentPage}">
+			<input type="hidden" id="parentid" name="parentid" th:value="${parentPage.getPageid()}">
+		</th:block>
 		<input type="hidden" id="spaceid" name="spaceid" th:value="${space.getSpaceid()}">
 	</form>
 </th:block>
