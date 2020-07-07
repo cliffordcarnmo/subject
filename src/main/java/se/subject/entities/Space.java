@@ -72,56 +72,22 @@ public class Space implements Serializable {
 	public Space() {
 	}
 
-	public int getSpaceid() {
-		return this.spaceid;
+	public Page addPage(Page page) {
+		getPages().add(page);
+		page.setSpace(this);
+		return page;
 	}
 
-	public void setSpaceid(int spaceid) {
-		this.spaceid = spaceid;
-	}
-	
 	public Timestamp getCreated() {
 		return this.created;
 	}
-
-	public void setCreated(Timestamp created) {
-		this.created = created;
-	}
-
+	
 	public String getDescription() {
 		return this.description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public String getName() {
 		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPermalink() {
-		return "https://www.subject.se/space/" + this.getUrl() + "/";
-	}
-	
-	public String getUrl() {
-		return this.url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	
-	public Timestamp getUpdated() {
-		return this.updated;
-	}
-
-	public void setUpdated(Timestamp updated) {
-		this.updated = updated;
 	}
 
 	public Boolean getOperator(User user) {
@@ -130,37 +96,68 @@ public class Space implements Serializable {
 				return true;
 			}
 		}
-	
 		return false;
-	}
-
-	public List<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
 	}
 
 	public List<Page> getPages() {
 		return this.pages;
 	}
 
+	public String getPermalink() {
+		return "https://www.subject.se/space/" + this.getUrl() + "/";
+	}
+
+	public int getSpaceid() {
+		return this.spaceid;
+	}
+
+	public Timestamp getUpdated() {
+		return this.updated;
+	}
+	
+	public String getUrl() {
+		return this.url;
+	}
+
+	public List<User> getUsers() {
+		return this.users;
+	}
+	
+	public Page removePage(Page page) {
+		getPages().remove(page);
+		page.setSpace(null);
+		return page;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setPages(List<Page> pages) {
 		this.pages = pages;
 	}
 
-	public Page addPage(Page page) {
-		getPages().add(page);
-		page.setSpace(this);
-
-		return page;
+	public void setSpaceid(int spaceid) {
+		this.spaceid = spaceid;
 	}
 
-	public Page removePage(Page page) {
-		getPages().remove(page);
-		page.setSpace(null);
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
+	}
 
-		return page;
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 }

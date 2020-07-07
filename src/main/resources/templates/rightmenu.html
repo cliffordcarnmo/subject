@@ -32,10 +32,10 @@
 	<nav class="nav flex-column">
 		<a class="nav-link" th:href="${page.getPermalink()}" th:text="${page.getPermalink()}"></a>
 	</nav>
-	<th:block th:if="${page.getParentid() gt 0}">
+	<th:block th:if="${page.getParentid() ne null}">
 		<h4>Parent Page</h4>
 		<nav class="nav flex-column">
-			<p class="nav-link" th:text="${page.getParentid().toString()}"></p>
+			<p class="nav-link" th:text="${page.getParentid().getName()}"></p>
 		</nav>
 	</th:block>
 	<h4>Created</h4>

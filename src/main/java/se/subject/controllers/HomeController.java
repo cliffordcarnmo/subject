@@ -43,7 +43,6 @@ public class HomeController {
 		modelAndView.addObject("homeView", true);
 		modelAndView.addObject("spaces", spaceRepository.findTop10ByOrderByUpdatedDesc());		
 		modelAndView.addObject("pageRepository", pageRepository);
-		
 		return modelAndView;
 	}
 }

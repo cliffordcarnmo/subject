@@ -64,67 +64,67 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public int getUserid() {
-		return this.userid;
-	}
-
-	public void setUserid(int userid) {
-		this.userid = userid;
-	}
-
 	public Timestamp getCreated() {
 		return this.created;
-	}
-
-	public void setCreated(Timestamp created) {
-		this.created = created;
 	}
 
 	public String getEmail() {
 		return this.email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getHash() {
 		return this.hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getSalt() {
 		return this.salt;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
-	public Timestamp getUpdated() {
-		return this.updated;
-	}
-
-	public void setUpdated(Timestamp updated) {
-		this.updated = updated;
 	}
 
 	public List<Space> getSpaces() {
 		return this.spaces;
 	}
 
+	public Timestamp getUpdated() {
+		return this.updated;
+	}
+
+	public int getUserid() {
+		return this.userid;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	public void setSpaces(List<Space> spaces) {
 		this.spaces = spaces;
+	}
+
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
+	}
+
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 }

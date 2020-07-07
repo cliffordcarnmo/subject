@@ -40,6 +40,7 @@ import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
 import se.subject.repositories.IUserRepository;
 import se.subject.services.messages.IMessageService;
+import se.subject.services.page.IPageService;
 
 @Controller
 public class SpaceController {
@@ -55,12 +56,14 @@ public class SpaceController {
 	@Autowired
 	private IPageRepository pageRepository;
 
+	@Autowired
+	private IPageService pageService;
+
 	@GetMapping("/space/")
 	public ModelAndView allSpaces(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("spaces");
-		modelAndView.addObject("spaces", spaceRepository.findAllByOrderByUpdatedDesc());		
-
+		modelAndView.addObject("spaces", spaceRepository.findAllByOrderByUpdatedDesc());
 		return modelAndView;
 	}
 
@@ -74,7 +77,6 @@ public class SpaceController {
 		} else {
 			modelAndView.addObject("newSpace", new Space());
 		}
-
 		return modelAndView;
 	}
 
@@ -97,7 +99,6 @@ public class SpaceController {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
 			}
 		}
-
 		return modelAndView;
 	}
 
@@ -110,11 +111,10 @@ public class SpaceController {
 		if(spaceRepository.findByUrl(spaceUrl).isPresent()){
 			Space space = spaceRepository.findByUrl(spaceUrl).get();
 			modelAndView.addObject("space", space);
-			modelAndView.addObject("allPages", pageRepository.findAllBySpaceOrderByUpdatedDesc(space));
+			modelAndView.addObject("pages", pageService.getTree(pageRepository.findAllBySpaceAndParentIsNullOrderByUpdatedDesc(space)));
 		}else{
 			modelAndView.addObject("message", messageService.getMessage("spaceError"));
 		}
-
 		return modelAndView;
 	}
 
@@ -146,7 +146,6 @@ public class SpaceController {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceCreated"));
 			}
 		}
-
 		return redirectView;
 	}
 
@@ -171,8 +170,6 @@ public class SpaceController {
 				redirectAttributes.addFlashAttribute("message", messageService.getMessage("spaceUpdated"));
 			}
 		}
-
 		return redirectView;
 	}
-
 }

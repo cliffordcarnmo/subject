@@ -33,6 +33,7 @@ public interface IPageRepository extends CrudRepository<Page, Integer> {
 	List<Page> findTop5BySpaceOrderByUpdatedDesc(Space space);
 	List<Page> findTop10BySpaceOrderByUpdatedDesc(Space space);
 	List<Page> findAllBySpaceOrderByUpdatedDesc(Space space);
+	List<Page> findAllBySpaceAndParentIsNullOrderByUpdatedDesc(Space space);
 	List<Page> findAllByUserOrderByUpdatedDesc(User user);
 	List<Page> findAllByUser(User user);
 	Optional<Page> findByUrl(String url);
