@@ -16,6 +16,8 @@ public class PageService implements IPageService {
 
 	public String getTree(Page page) {
 		return buildTree(new ArrayList<Page>() {
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(page);
 			}

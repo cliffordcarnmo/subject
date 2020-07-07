@@ -109,7 +109,7 @@ public class PageController {
 			if (pageRepository.findByUrl(pageUrl).isPresent()) {
 				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("space", page.getSpace());
-				modelAndView.addObject("pages", pageService.getTree(pageRepository.findAllBySpaceAndParentIsNullOrderByUpdatedDesc(spaceRepository.findByUrl(page.getUrl()).get())));
+				modelAndView.addObject("pages", pageService.getTree(pageRepository.findAllBySpaceAndParentIsNullOrderByUpdatedDesc(page.getSpace())));
 				modelAndView.addObject("page", page);
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("pageError"));
