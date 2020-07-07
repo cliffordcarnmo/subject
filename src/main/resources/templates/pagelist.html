@@ -1,0 +1,7 @@
+<th:block th:each="page : ${pages}">
+	<ul class="list-unstyled">
+		<li><a th:text="${page.getName()}" th:href="${'/space/' + page.getSpace().getUrl() + '/' + page.getUrl()}"></a> <small class="text-muted" th:text="${page.getUser().getName() + ', ' + page.getUpdated()}"></small></li>
+		<th:block th:if="${page.getChildren()} gt 0">
+		</th:block>
+	</ul>
+</th:block>

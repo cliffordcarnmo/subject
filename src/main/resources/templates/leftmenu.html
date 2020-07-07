@@ -23,6 +23,12 @@
 			<p><a class="btn btn-primary "role="button" th:href="${'/space/' + space.getUrl() + '/page/create/'}">Create Page</a></p>
 		</th:block>
 		<a class="nav-link" th:text="${space.getName()}" th:href="'/space/' + ${space.getUrl()}"></a>
+
+		<th:block th:if="${pages} and ${pages.length()} gt 0">
+			<h4 class="pt-3">Pages</h4>
+			<div th:utext="${pages}"></div>
+		</th:block>
+
 	</th:block>
 </nav>
 

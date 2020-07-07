@@ -43,6 +43,7 @@ import se.subject.repositories.ICommentRepository;
 import se.subject.repositories.IPageRepository;
 import se.subject.repositories.ISpaceRepository;
 import se.subject.services.messages.IMessageService;
+import se.subject.services.page.IPageService;
 
 @Controller
 public class PageController {
@@ -58,6 +59,9 @@ public class PageController {
 	@Autowired
 	private ICommentRepository commentRepository;
 
+	@Autowired
+	private IPageService pageService;
+
 	@GetMapping("/space/{spaceUrl}/{pageUrl}")
 	public ModelAndView space(@PathVariable("spaceUrl") String spaceUrl, @PathVariable("pageUrl") String pageUrl, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -69,7 +73,8 @@ public class PageController {
 			modelAndView.addObject("space", space);
 
 			if (pageRepository.findByUrl(pageUrl).isPresent()) {
-				modelAndView.addObject("pages", pageRepository.findAllBySpaceOrderByUpdatedDesc(spaceRepository.findByUrl(spaceUrl).get()));
+				//modelAndView.addObject("pages", pageRepository.findAllBySpaceOrderByUpdatedDesc(spaceRepository.findByUrl(spaceUrl).get()));
+				modelAndView.addObject("pages", pageService.getTree(pageRepository.findAllBySpaceAndParentIsNullOrderByUpdatedDesc(spaceRepository.findByUrl(spaceUrl).get())));
 
 				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("page", page);
@@ -104,6 +109,7 @@ public class PageController {
 			if (pageRepository.findByUrl(pageUrl).isPresent()) {
 				Page page = pageRepository.findByUrl(pageUrl).get();
 				modelAndView.addObject("space", page.getSpace());
+				modelAndView.addObject("pages", pageService.getTree(pageRepository.findAllBySpaceAndParentIsNullOrderByUpdatedDesc(spaceRepository.findByUrl(page.getUrl()).get())));
 				modelAndView.addObject("page", page);
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("pageError"));
@@ -124,6 +130,7 @@ public class PageController {
 			if (spaceRepository.findByUrl(spaceUrl).isPresent()) {
 				Space space = spaceRepository.findByUrl(spaceUrl).get();
 				modelAndView.addObject("space", space);
+				modelAndView.addObject("pages", pageService.getTree(pageRepository.findAllBySpaceAndParentIsNullOrderByUpdatedDesc(spaceRepository.findByUrl(spaceUrl).get())));
 				modelAndView.addObject("page", new Page());
 			} else {
 				modelAndView.addObject("message", messageService.getMessage("spaceError"));
@@ -207,9 +214,10 @@ public class PageController {
 				} else {
 					User user = (User) session.getAttribute("user");
 					Page page = new Page();
-	
-					if (values.containsKey("parentid")) {
-						page.setParentid(Integer.parseInt(values.getFirst("parentid")));
+
+					if (values.containsKey("parentid") && !values.getFirst("parentid").isBlank()) {
+						//page.setParentid(Integer.parseInt(values.getFirst("parentid")));
+						page.setParent(pageRepository.findById(Integer.parseInt(values.getFirst("parentid"))).get());
 					}
 					
 					page.setName(values.getFirst("name"));

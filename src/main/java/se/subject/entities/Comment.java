@@ -65,52 +65,52 @@ public class Comment implements Serializable {
 		return this.commentid;
 	}
 
-	public void setCommentid(int commentid) {
-		this.commentid = commentid;
-	}
-
 	public String getContent() {
 		return this.content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 	public Timestamp getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
-		this.created = created;
+	public Page getPage() {
+		return this.page;
 	}
 
 	public int getParentid() {
 		return this.parentid;
 	}
 
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
-	}
-
 	public Timestamp getUpdated() {
 		return this.updated;
 	}
 
-	public void setUpdated(Timestamp updated) {
-		this.updated = updated;
+	public User getUser() {
+		return this.user;
 	}
 
-	public Page getPage() {
-		return this.page;
+	public void setCommentid(int commentid) {
+		this.commentid = commentid;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
 	}
 
 	public void setPage(Page page) {
 		this.page = page;
 	}
 
-	public User getUser() {
-		return this.user;
+	public void setParentid(int parentid) {
+		this.parentid = parentid;
+	}
+
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
 	}
 
 	public void setUser(User user) {

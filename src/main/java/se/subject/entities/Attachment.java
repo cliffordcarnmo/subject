@@ -66,52 +66,52 @@ public class Attachment implements Serializable {
 		return this.attachmentid;
 	}
 
-	public void setAttachmentid(int attachmentid) {
-		this.attachmentid = attachmentid;
-	}
-
 	public String getContent() {
 		return this.content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 	public Timestamp getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
-		this.created = created;
-	}
-
 	public String getName() {
 		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Timestamp getUpdated() {
-		return this.updated;
-	}
-
-	public void setUpdated(Timestamp updated) {
-		this.updated = updated;
 	}
 
 	public Page getPage() {
 		return this.page;
 	}
 
-	public void setPage(Page page) {
-		this.page = page;
+	public Timestamp getUpdated() {
+		return this.updated;
 	}
 
 	public User getUser() {
 		return this.user;
+	}
+
+	public void setAttachmentid(int attachmentid) {
+		this.attachmentid = attachmentid;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
 	}
 
 	public void setUser(User user) {

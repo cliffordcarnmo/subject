@@ -47,11 +47,18 @@ public class Page implements Serializable {
 	@Column(nullable = false, length = 1024)
 	private String name;
 
-	@Column(nullable = false, length = 1024)
+	@Column(unique = true, nullable = false, length = 1024)
 	private String url;
+	
+	//private Page parentid;
 
-	private int parentid;
+    @ManyToOne
+    @JoinColumn(name = "parentid")
+    private Page parent;
 
+    @OneToMany(mappedBy = "parent")
+    private List<Page> children;
+   
 	@UpdateTimestamp
 	private Timestamp updated;
 
@@ -73,127 +80,130 @@ public class Page implements Serializable {
 	@JoinColumn(name = "USERID", nullable = false)
 	private User user;
 
-	public Page() {
+    public Page() {
+	}
+    
+    public Attachment addAttachment(Attachment attachment) {
+		getAttachments().add(attachment);
+		attachment.setPage(this);
+		return attachment;
 	}
 
-	public int getPageid() {
-		return this.pageid;
-	}
-
-	public void setPageid(int pageid) {
-		this.pageid = pageid;
-	}
-
-	public String getContent() {
-		return this.content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public Timestamp getCreated() {
-		return this.created;
-	}
-
-	public void setCreated(Timestamp created) {
-		this.created = created;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPermalink() {
-		return "https://www.subject.se/space/" + this.getSpace().getUrl() + "/" + this.getUrl();
-	}
-	
-	public String getUrl() {
-		return this.url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public int getParentid() {
-		return this.parentid;
-	}
-
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
-	}
-
-	public Timestamp getUpdated() {
-		return this.updated;
-	}
-
-	public void setUpdated(Timestamp updated) {
-		this.updated = updated;
+	public Comment addComment(Comment comment) {
+		getComments().add(comment);
+		comment.setPage(this);
+		return comment;
 	}
 
 	public List<Attachment> getAttachments() {
 		return this.attachments;
 	}
 
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
-	}
-
-	public Attachment addAttachment(Attachment attachment) {
-		getAttachments().add(attachment);
-		attachment.setPage(this);
-
-		return attachment;
-	}
-
-	public Attachment removeAttachment(Attachment attachment) {
-		getAttachments().remove(attachment);
-		attachment.setPage(null);
-
-		return attachment;
-	}
+	public List<Page> getChildren() {
+        return children;
+    }
 
 	public List<Comment> getComments() {
 		return this.comments;
 	}
 
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
+	public String getContent() {
+		return this.content;
 	}
 
-	public Comment addComment(Comment comment) {
-		getComments().add(comment);
-		comment.setPage(this);
-
-		return comment;
+	public Timestamp getCreated() {
+		return this.created;
 	}
 
-	public Comment removeComment(Comment comment) {
-		getComments().remove(comment);
-		comment.setPage(null);
+	public String getName() {
+		return this.name;
+	}
 
-		return comment;
+	public int getPageid() {
+		return this.pageid;
+	}
+
+	public Page getParentid() {
+		return this.parent;
+	}
+	
+	public void setParentid(Page page) {
+		this.parent = page;
+	}
+
+	public String getPermalink() {
+		return "https://www.subject.se/space/" + this.getSpace().getUrl() + "/" + this.getUrl();
 	}
 
 	public Space getSpace() {
 		return this.space;
 	}
 
+	public Timestamp getUpdated() {
+		return this.updated;
+	}
+
+	public String getUrl() {
+		return this.url;
+	}
+    
+	public User getUser() {
+		return this.user;
+	}
+
+	public Attachment removeAttachment(Attachment attachment) {
+		getAttachments().remove(attachment);
+		attachment.setPage(null);
+		return attachment;
+	}
+
+	public Comment removeComment(Comment comment) {
+		getComments().remove(comment);
+		comment.setPage(null);
+		return comment;
+	}
+
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPageid(int pageid) {
+		this.pageid = pageid;
+	}
+
+	public void setParent(Page parent) {
+		this.parent = parent;
+	}
+
 	public void setSpace(Space space) {
 		this.space = space;
 	}
 
-	public User getUser() {
-		return this.user;
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 }
